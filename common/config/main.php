@@ -51,6 +51,7 @@ return array(
             'showScriptName' => false,
             'urlSuffix' => '.html',
             'rules' => array(
+
             ),
         ),
 
