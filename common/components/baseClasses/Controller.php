@@ -46,13 +46,7 @@ abstract class Controller extends CController
      * @var string
      */
     protected $_pageKeyWords;
-
-    /**
-     * Вторичная конфигурация.
-     * @var array
-     */
-    protected $_config;
-
+    
     /**
      * Ajax валидация форм.
      * @param object $model Модель, которую надо проверить
