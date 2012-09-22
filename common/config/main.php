@@ -14,6 +14,10 @@ return array(
 
     'import' => array(
         'common.components.*',
+        'common.components.baseClasses.*',
+        'common.components.global.*',
+        'common.components.validators.*',
+
         'common.models.*',
     ),
 
