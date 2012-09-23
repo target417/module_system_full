@@ -22,7 +22,7 @@ return array(
     ),
 
     'modules' => array(
-
+        'user',
     ),
 
     'components' => array(
@@ -61,9 +61,9 @@ return array(
 
         'db' => array(
             'class' => 'system.db.CDbConnection',
-            'connectionString' => 'mysql:host=localhost;dbname=<dbName>',
-            'username' => '<userName>',
-            'password' => '<passeord>',
+            'connectionString' => 'mysql:host=localhost;dbname=module_system',
+            'username' => 'module_system',
+            'password' => 'password',
             'charset' => 'utf8',
             'queryCacheID' => 'system.memCache',
             'schemaCachingDuration' => 3600,
