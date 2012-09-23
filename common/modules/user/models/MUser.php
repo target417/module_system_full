@@ -7,12 +7,12 @@
    `login` VARCHAR( 20 ) NOT NULL ,
    `password` VARCHAR( 32 ) NOT NULL ,
    `theme` TINYINT UNSIGNED NULL ,
-   `cookie_solt` INT UNSIGNED NOT NULL ,
+   `cookies_solt` INT UNSIGNED NOT NULL ,
    `is_confirm` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT '0',
    `is_remove` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT '0'
    ) ENGINE = MYISAM ;
  */
-final class MUser extends ActiveRecord
+class MUser extends ActiveRecord
 {
     /**
      * Поле "запомнить меня".
@@ -51,6 +51,12 @@ final class MUser extends ActiveRecord
 
             array('theme', 'numerical'),
             array('theme', 'default', 'value' => $this->getDefaultTheme()),
+
+            array('saveMe', 'numerical'),
+
+            // Вход в систему.
+            array('login, password', 'required', 'on' => 'login'),
+			array('password', 'authenticate', 'on' => 'login'),
         );
     }
 
@@ -65,6 +71,7 @@ final class MUser extends ActiveRecord
             'theme' => 'Тема оформления',
             'is_confirm' => 'Активирован',
             'is_remove' => 'Удален',
+            'save_me' => 'Запомнить меня',
         );
     }
     /**
@@ -87,6 +94,46 @@ final class MUser extends ActiveRecord
         return array(
 
         );
+    }
+
+    /**
+	 * Ищет в БД пользоватея с указанными логином и паролем.
+     * Метод валидации.
+	 */
+	public function authenticate()
+    {
+        if(!$this->hasErrors())
+        {
+            $identity = new UserIdentity($this->login, $this->password, $this->saveMe);
+            $identity->authenticate();
+
+            switch($identity->errorCode)  {
+                case UserIdentity::ERROR_NONE:
+                    Yii::app()->user->login($identity, 604800); // 60*60*24*7 = 604800
+					break;
+
+                case UserIdentity::ERROR_USERNAME_INVALID:
+                    $this->addError('login','Пользователь с указанным логином не зарегистрирован.');
+					break;
+
+                case UserIdentity::ERROR_PASSWORD_INVALID:
+                    $this->addError('password','Неварно указан пароль.');
+					break;
+
+                case UserIdentity::ERROR_IS_CONFIRM_INVALID:
+                    $this->addError('login','Пользователь не активирован.');
+					break;
+            }
+        }
+    }
+    /**
+     * Возвращает хэш-сумму пароля.
+     * @param string $password Пароль
+     * @return string хэш-сумма
+     */
+    public function passwordCript($password)
+    {
+        return strrev(md5($password));
     }
 
     /**

@@ -37,21 +37,4 @@ abstract class ActiveRecord extends CActiveRecord
             $this->$attribute = LBbCode::bbToHtml($this->$attribute, 'full');
         }
     }
-
-    /**
-     * @see CActiveForm::beforeSave()
-     */
-    public function beforeSave()
-    {
-        if(!parent::beforeSave())
-            return false;
-
-        // Присваивает всем пустым полям значение NULL.
-        while($item = each($this->attributes)) {
-            if($item[1] === '')
-                $this->$item[0] = new CDbExpression('NULL');
-        }
-
-        return true;
-    }
 }

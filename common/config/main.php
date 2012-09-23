@@ -19,6 +19,7 @@ return array(
         'common.components.validators.*',
 
         'common.models.*',
+        'common.modules.user.models.*',
     ),
 
     'modules' => array(
@@ -65,8 +66,8 @@ return array(
             'username' => 'module_system',
             'password' => 'password',
             'charset' => 'utf8',
-            'queryCacheID' => 'system.memCache',
-            'schemaCachingDuration' => 3600,
+//            'queryCacheID' => 'system.memCache',
+//            'schemaCachingDuration' => 0,
         ),
 
         'memCache' => array(

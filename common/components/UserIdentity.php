@@ -4,6 +4,8 @@
  */
 class UserIdentity extends CUserIdentity
 {
+	const ERROR_IS_CONFIRM_INVALID = 3;
+
     /**
      * @see CUserIdentity::__construct()
      */
@@ -14,31 +16,31 @@ class UserIdentity extends CUserIdentity
     }
 
     /**
-     * @see CuserIdentity::authenticate()
+     * @see CUserIdentity::authenticate()
      */
     public function authenticate()
     {
         $record = MUser::model()->findByAttributes(array(
             'login' => $this->username,
             'is_remove' => 0,
-            'is_activate' => 1,
             ));
 
-        if ($record === null)
+        if ($record === null) {
             $this->errorCode = self::ERROR_USERNAME_INVALID;
-        else if ($record->password !== $record->passwordCript($this->password))
+        } else if($record->password !== $record->passwordCript($this->password)) {
             $this->errorCode = self::ERROR_PASSWORD_INVALID;
-        else {
+        } else if($record->is_confirm != 1) {
+            $this->errorCode = self::ERROR_IS_CONFIRM_INVALID;
+        } else {
             $this->_id = $record->id;
 
             $this->setState('id', $record->id);
             $this->setState('theme', $record->theme);
             $this->setState('login', $record->login);
-            $this->setState('theme', $record->getThemeInfoById($record->theme, 'enName'));
 
             // Генерируем соль для входа по cookies, если отмеченно "запомнить меня".
             if ($this->_saveMe == 1) {
-                $solt = LNumber::generateNumber();
+                $solt = LNumber::generateNumber(10);
                 $this->setState('cookiesSolt', $solt);
 
                 $record->cookies_solt = $solt;

@@ -3,35 +3,32 @@
  * Библиотека функций работы с числами.
  * Входит в состав Библиотеки глобальных функций.
  * @auhot Пикаев Вкитор <target417@gmail.com>
- * @since 1.0
+ * @since 2.0
  */
 class LNumber
 {
 	/**
 	 * Случайное число для указанного типа переменных.
-	 * @param strins $type Тип переменной (максимальная длинна числа)
+	 * @param strins $size Колличество цифр в результате. От 1 до 10.
+     * если указанно иное значение, вернет случайное число.
 	 * @return int Сгенрированное число
 	 */
-	static public function generateNumber($type = 'int')
+	static public function generateNumber($size = null)
 	{
-		switch($type) {
-			case 'tinyint' :
-				$maxValue = 127;
-				break;
+        if($size !== null) {
+            if((1 <= $size) && ($size <= 10)) {
+                $min = '1';
+                $max = '9';
 
-			case 'mediumint' :
-				$maxValue = 8388607;
-				break;
+                for($i = 1; $i < $size; $i++) {
+                    $min .= '0';
+                    $max .= '9';
+                }
 
-			case 'int' :
-				$maxValue = 2147483647;
-				break;
+                return rand($min, $max);
+            }
+        }
 
-			case 'bigint' :
-				$maxValue = 9223372036854775807;
-				break;
-		}
-
-		return rand(0, $maxValue);
+        return rand();
 	}
 }
