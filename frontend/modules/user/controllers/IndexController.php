@@ -85,6 +85,43 @@ class IndexController extends FrontController
     }
 
     /**
+     * Профиь пользователя.
+     * @param int $id Id пользователя
+     * @return void
+     */
+    public function actionProfile($id = null)
+    {
+        // Присваеваем id пользователя.
+        if($id !== null)
+            $id = (int)$id;
+        else if(!Yii::app()->user->isGuest)
+            $id = Yii::app()->user->id;
+        else
+            throw new CHttpException(404, self::EXCEPTION_WRONG_ADDRESS);
+
+        // Если это профиль текущего пользователя, кэширование не начинаем.
+        if(!Yii::app()->user->isGuest && (Yii::app()->user->id === $id)) {
+            $this->render('profile', array(
+                'user' => $this->loadUserData($id),
+            ));
+        // Если профиль н епринадлежит текущему пользователю, начинаем кэширование.
+        } else {
+            if($this->beginCache($id, array(
+                'duration' => $this->module->cacheTime['profile'],
+                'varyByParam' => array(
+                    'id',
+                ),
+            ))) {
+                $this->render('profile', array(
+                    'user' => $this->loadUserData($id),
+                ));
+
+                $this->endCache();
+            }
+        }
+    }
+
+    /**
      * Востановление забытого пароля.
      * @return void
      */
@@ -188,4 +225,14 @@ class IndexController extends FrontController
 		$record->solt = LNumber::generateNumber();
 		$record->save();
 	}
+
+    /**
+     * Загрузка информации о пользователе.
+     * @param int $id Id пользователя
+     * @return array
+     */
+    private function loadUserData($id)
+    {
+        $user = new FUser();
+    }
 }
