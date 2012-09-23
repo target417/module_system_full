@@ -46,7 +46,7 @@ abstract class Controller extends CController
      * @var string
      */
     protected $_pageKeyWords;
-    
+
     /**
      * Ajax валидация форм.
      * @param object $model Модель, которую надо проверить
@@ -69,7 +69,7 @@ abstract class Controller extends CController
     {
         $errors = true;
 
-        while($model  = each($models)) {
+        foreach($models as $model) {
             if(!$model->validate())
                 $errors = false;
         }

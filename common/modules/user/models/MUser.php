@@ -21,6 +21,18 @@ class MUser extends ActiveRecord
     public $saveMe;
 
     /**
+     * Повторный ввод пароля.
+     * @var string
+     */
+    public $password2;
+
+    /**
+     * Капча.
+     * @var string
+     */
+    public $verifyCode;
+
+    /**
      * @see CActiveRecord::model()
      */
     public static function model($className=__CLASS__)
@@ -54,6 +66,13 @@ class MUser extends ActiveRecord
 
             array('saveMe', 'numerical'),
 
+            // Регистрация нового пользователя.
+            array('login, password, password2', 'required', 'on' => 'registration'),
+            array('login', 'unique', 'on' => 'registration'),
+            array('password2', 'compare', 'compareAttribute' => 'password', 'on' => 'registration', 'message' => 'Ошибка пр иповторе пароля.'),
+			array('verifyCode', 'captcha', 'allowEmpty' => !extension_loaded('gd'), 'on' => 'registration'),
+
+            //
             // Вход в систему.
             array('login, password', 'required', 'on' => 'login'),
 			array('password', 'authenticate', 'on' => 'login'),
@@ -68,10 +87,12 @@ class MUser extends ActiveRecord
         return array(
             'login' => 'Логин',
             'password' => 'Пароль',
+            'password2' => 'Повтор пароля',
             'theme' => 'Тема оформления',
             'is_confirm' => 'Активирован',
             'is_remove' => 'Удален',
             'save_me' => 'Запомнить меня',
+            'verifyCode' => 'Код проверки',
         );
     }
     /**
@@ -80,9 +101,9 @@ class MUser extends ActiveRecord
     public function attributeNotes()
     {
         return array(
-
             'login' => '6-16 символов. Русские или английские буквы и цыфры.',
             'password' => 'Не меньше 6 символов.',
+            'verifyCode' => 'Решите уравнение.',
         );
     }
 
@@ -92,7 +113,11 @@ class MUser extends ActiveRecord
     public function relations()
     {
         return array(
-
+            'rFull' => array(
+                self::HAS_ONE,
+                'MUserFull',
+                'id',
+            ),
         );
     }
 
