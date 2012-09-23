@@ -29,7 +29,7 @@ class IndexController extends FrontController
                 $userFull->id = $user->id;
                 $userFull->save(false);
 
-                $this->checkEmail($user->id, $userFull->email);
+                $this->checkEmail($user->id, $user->email);
                 $this->redirect(Yii::app()->createUrl('user/index/registrationOk'));
             }
         }
@@ -85,6 +85,47 @@ class IndexController extends FrontController
     }
 
     /**
+     * Востановление забытого пароля.
+     * @return void
+     */
+    public function actionRestorePassword()
+	{
+		if(!Yii::app()->user->isGuest)
+			$this->redirect(Yii::app()->homeUrl);
+
+		$user = new MUser();
+		$user->scenario = 'restorePassword';
+
+		if(isset($_POST['MUser'])) {
+			$user->attributes = $_POST['MUser'];
+
+			if($user->validate()) {
+				$newPassword = LString::generateString(10);
+
+                Yii::app()->db->createCommand("
+                    UPDATE user SET password = '{$user->passwordCript($newPassword)}'
+                    WHERE id = {$user->id}
+                ")->execute();
+
+				$this->redirect(Yii::app()->createUrl('user/index/restorePasswordOk'));
+			}
+		}
+
+		$this->render('restorePassword', array(
+			'user' => $user,
+		));
+	}
+
+    /**
+     * Окончание востановления забытого пароля.
+     * @return void
+     */
+    public function actionrestorePasswordOk()
+    {
+        $this->render('restorePasswordOk');
+    }
+
+    /**
      * Подтверждение e-mail адреса.
      * Переход на страницу осуществляется из письма.
      * @param int $user Id пользователя
@@ -114,14 +155,9 @@ class IndexController extends FrontController
                 DELETE FROM user_confirm_email WHERE id = {$record['id']}
             ")->execute();
 
-            // Активируем пользователя.
+            // Активируем пользователя и оновляем адрес.
             Yii::app()->db->createCommand("
-                UPDATE user SET is_confirm = 1 WHERE id = {$record['user']}
-            ")->execute();
-
-            // Обновляем адрес почты.
-            Yii::app()->db->createCommand("
-                UPDATE user_full SET email = '{$record['email']}' WHERE id = {$record['user']}
+                UPDATE user SET is_confirm = 1, email = '{$record['email']}' WHERE id = {$record['user']}
             ")->execute();
 
             $this->redirect(Yii::app()->homeUrl);

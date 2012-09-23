@@ -26,10 +26,10 @@
     </div>
 
     <div class="row">
-        <?php echo $form->label($userFull, 'email'); ?>
-        <?php echo $form->textField($userFull, 'email'); ?>
-        <?php echo $form->note($userFull, 'email'); ?>
-        <?php echo $form->error($userFull, 'email'); ?>
+        <?php echo $form->label($user, 'email'); ?>
+        <?php echo $form->textField($user, 'email'); ?>
+        <?php echo $form->note($user, 'email'); ?>
+        <?php echo $form->error($user, 'email'); ?>
     </div>
 
     <div class="row">

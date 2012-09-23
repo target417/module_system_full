@@ -4,7 +4,6 @@
  *
    CREATE TABLE `user_full` (
    `id` INT UNSIGNED NOT NULL ,
-   `email` VARCHAR( 100 ) NOT NULL ,
    `name` VARCHAR( 25 ) NULL ,
    `sex` ENUM( 'Мужской', 'Женский' ) NULL ,
    `birthday` DATE NULL ,
@@ -36,9 +35,6 @@ class MUserFull extends ActiveRecord
     public function rules()
     {
         return array(
-            array('email', 'length', 'max' => 100),
-            array('email', 'match', 'pattern' => '/^[a-z0-9\-_\.]+@[a-z0-9\-_\.]+.[a-z]{2,5}$/iu'),
-
             array('name', 'length', 'max' => 25),
             array('name', 'match', 'pattern' => '/^([а-яa-z0-9 _\-]+)$/i'),
 
@@ -47,10 +43,6 @@ class MUserFull extends ActiveRecord
             array('birthday', 'match', 'pattern' => '/^\d\d\.\d\d\.\d\d\d\d$/'),
 
             array('date_reg', 'default', 'value' => new CDbExpression('NOW()')),
-
-            // Реистрация нового пользователя.
-            array('email', 'required', 'on' => 'registration'),
-            array('email', 'unique', 'on' => 'registration'),
         );
     }
 
@@ -60,7 +52,6 @@ class MUserFull extends ActiveRecord
     public function attributeLabels()
     {
         return array(
-            'email' => 'E-mail',
             'name' => 'Имя',
             'sex' => 'Пол',
             'birthday' => 'День рождения',
@@ -72,7 +63,6 @@ class MUserFull extends ActiveRecord
     public function attributeNotes()
     {
         return array(
-            'email' => 'Потребуется для активаии аккаунта',
             'name' => 'До 25 символов.',
             'sex' => '',
             'birthday' => 'В формате дд.мм.гггг',

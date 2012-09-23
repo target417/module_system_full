@@ -6,6 +6,7 @@
    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
    `login` VARCHAR( 20 ) NOT NULL ,
    `password` VARCHAR( 32 ) NOT NULL ,
+   `email` VARCHAR( 100 ) NOT NULL ,
    `theme` TINYINT UNSIGNED NULL ,
    `cookies_solt` INT UNSIGNED NOT NULL ,
    `is_confirm` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT '0',
@@ -59,6 +60,9 @@ class MUser extends ActiveRecord
 
             array('password', 'length', 'min' => 6),
 
+            array('email', 'length', 'max' => 100),
+            array('email', 'match', 'pattern' => '/^[a-z0-9\-_\.]+@[a-z0-9\-_\.]+.[a-z]{2,5}$/iu'),
+
             array('is_confirm, is_remove', 'default', 'value' => 0),
 
             array('theme', 'numerical'),
@@ -67,15 +71,19 @@ class MUser extends ActiveRecord
             array('saveMe', 'numerical'),
 
             // Регистрация нового пользователя.
-            array('login, password, password2', 'required', 'on' => 'registration'),
-            array('login', 'unique', 'on' => 'registration'),
+            array('login, email, password, password2', 'required', 'on' => 'registration'),
+            array('login, email', 'unique', 'on' => 'registration'),
             array('password2', 'compare', 'compareAttribute' => 'password', 'on' => 'registration', 'message' => 'Ошибка пр иповторе пароля.'),
 			array('verifyCode', 'captcha', 'allowEmpty' => !extension_loaded('gd'), 'on' => 'registration'),
 
-            //
             // Вход в систему.
             array('login, password', 'required', 'on' => 'login'),
 			array('password', 'authenticate', 'on' => 'login'),
+
+            // Востановление пароля.
+            array('login, email, verifyCode', 'required', 'on' => 'restorePassword'),
+			array('login', 'checkUserByEmail', 'on' => 'restorePassword'),
+			array('verifyCode', 'captcha', 'allowEmpty' => !extension_loaded('gd'), 'on' => 'restorePassword'),
         );
     }
 
@@ -87,6 +95,7 @@ class MUser extends ActiveRecord
         return array(
             'login' => 'Логин',
             'password' => 'Пароль',
+            'email' => 'E-mail',
             'password2' => 'Повтор пароля',
             'theme' => 'Тема оформления',
             'is_confirm' => 'Активирован',
@@ -103,6 +112,7 @@ class MUser extends ActiveRecord
         return array(
             'login' => '6-16 символов. Русские или английские буквы и цыфры.',
             'password' => 'Не меньше 6 символов.',
+            'email' => 'Потребуется для активаии аккаунта',
             'verifyCode' => 'Решите уравнение.',
         );
     }
@@ -151,6 +161,24 @@ class MUser extends ActiveRecord
             }
         }
     }
+
+    /**
+	 * Проверка наличия пользователя с указанными логином и email адресом.
+     * метод валидации.
+	 */
+	public function checkUserByEmail()
+	{
+		if(!$this->hasErrors()) {
+			if(!$user = MUser::model()->find('t.login = :login AND t.email = :email', array(
+				':login' => $this->login,
+				':email' => $this->email,
+			)))
+				$this->addError('login', 'Пользователь с указанной связкой логин-email не найден.');
+			else
+				$this->id = $user->id;
+		}
+	}
+
     /**
      * Возвращает хэш-сумму пароля.
      * @param string $password Пароль
