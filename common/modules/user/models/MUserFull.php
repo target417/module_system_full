@@ -9,7 +9,7 @@
    `birthday` DATE NULL ,
    `date_reg` DATETIME NOT NULL ,
    PRIMARY KEY ( `id` )
-   ) ENGINE = MYISAM ;
+   ) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
  */
 class MUserFull extends ActiveRecord
 {

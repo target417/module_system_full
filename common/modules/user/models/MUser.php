@@ -8,10 +8,10 @@
    `password` VARCHAR( 32 ) NOT NULL ,
    `email` VARCHAR( 100 ) NOT NULL ,
    `theme` TINYINT UNSIGNED NULL ,
-   `cookies_solt` INT UNSIGNED NOT NULL ,
+   `cookies_solt` INT UNSIGNED NULL ,
    `is_confirm` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT '0',
    `is_remove` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT '0'
-   ) ENGINE = MYISAM ;
+   ) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
  */
 class MUser extends ActiveRecord
 {
@@ -104,6 +104,7 @@ class MUser extends ActiveRecord
             'verifyCode' => 'Код проверки',
         );
     }
+
     /**
      * @see ActiveRecord::attributeNotes()
      */
@@ -127,6 +128,11 @@ class MUser extends ActiveRecord
                 self::HAS_ONE,
                 'MUserFull',
                 'id',
+            ),
+            'rGroup' => array(
+                self::MANY_MANY,
+                'MUserGroup',
+                'user_group_rel(user, group)',
             ),
         );
     }

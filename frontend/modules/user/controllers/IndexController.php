@@ -15,12 +15,10 @@ class IndexController extends FrontController
 
         $user = new MUser();
         $userFull = new MUserFull();
-        $user->scenario = 'registration';
-        $userFull->scenario = 'registration';
+        $user->scenario = $userFull->scenario = 'registration';
 
-        if(isset($_POST['MUser']) && isset($_POST['MUserFull'])) {
+        if(isset($_POST['MUser'])) {
             $user->attributes = $_POST['MUser'];
-            $userFull->attributes = $_POST['MUserFull'];
 
             if($this->multipleValidate(array($user, $userFull))) {
                 $user->password = $user->passwordCript($user->password);
@@ -30,6 +28,29 @@ class IndexController extends FrontController
                 $userFull->save(false);
 
                 $this->checkEmail($user->id, $user->email);
+
+                // Присваиваем пользователю группу по умолччанию.
+                $group = MUserGroup::getDefault();
+
+                Yii::app()->db->createCommand("
+                    INSERT INTO user_group_rel(
+                        `user`,
+                        `group`)
+                    VALUES (
+                        {$user->id},
+                        {$group})
+                ")->execute();
+
+                // Делаем запись о последнем посещении.
+                Yii::app()->db->createCommand("
+                INSERT INTO user_last_online(
+                    `user`,
+                    `last_online`)
+                VALUES (
+                    {$user->id},
+                    NOW())
+                ")->execute();
+
                 $this->redirect(Yii::app()->createUrl('user/index/registrationOk'));
             }
         }
@@ -233,6 +254,30 @@ class IndexController extends FrontController
      */
     private function loadUserData($id)
     {
-        $user = new FUser();
+        $sql = Yii::app()->db->createCommand("
+            SELECT
+                t.id,
+                t.login,
+                rFull.date_reg,
+                rFull.birthday,
+                rFull.sex,
+                rFull.name,
+                rLastOnline.last_online
+            FROM
+                user as t,
+                user_full as rFull,
+                user_last_online as rLastOnline
+            WHERE
+                t.id = {$id}
+            AND t.is_confirm = 1
+            AND t.is_remove = 0
+            AND t.id = rFull.id
+            AND t.id = rLastOnline.user
+        ");
+
+        if(!$record = $sql->queryRow())
+            throw new CHttpException(404, self::EXCEPTION_WRONG_ADDRESS);
+
+        return $record;
     }
 }
