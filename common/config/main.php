@@ -70,7 +70,9 @@ return array(
 //            'schemaCachingDuration' => 0,
         ),
 
-        'memCache' => array(
+        'cache' => array(
+            'class' => 'system.caching.CFileCache',
+        ),'memCache' => array(
             'class' => 'system.caching.CFileCache',
         ),
         'dbCache' => array(

@@ -2,43 +2,43 @@
 /**
  * Пользователь (сущность).
  */
-class SUser
+class EUser extends Essence
 {
     /**
      * Id.
      * @var int
      */
-    public $id;
+    public $id = null;
 
     /**
      * Логин.
      * @var string
      */
-    public $login;
+    public $login = null;
 
     /**
      * E-mail.
      * @var email
      */
-    public $email;
+    public $email = null;
 
     /**
      * Группы (роли).
      * @var array
      */
-    public $groups;
+    public $groups = null;
 
     /**
      * Дата регистрации.
      * @var string
      */
-    public $dateReg;
+    public $dateReg = null;
 
     /**
      * Дата последнего посещения.
      * @var string
      */
-    public $lastOnline;
+    public $lastOnline = null;
 
     /**
      * Полное имя.
@@ -78,11 +78,21 @@ class SUser
 
     /**
      * Возвращает логин пользователя.
+     * @param bool $isLink Если true, то выводит логин в виде ссылки, иначе в виде такста
      * @return void
      */
-    public function getLogin()
+    public function getLogin($isLink = true)
     {
-
+        if($isLink === true) {
+            $this->widget('WUSerLogin', array(
+                'id' => $this->id,
+                'login' => $this->login,
+            ));
+        } else {
+            $this->widget('WUSerLogin', array(
+                'login' => $this->login,
+            ));
+        }
     }
 
     /**

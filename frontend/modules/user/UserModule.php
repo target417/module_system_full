@@ -19,6 +19,7 @@ class UserModule extends WebModule
 	{
 		$this->setImport(array(
 			'common.modules.user.components.*',
+			'common.modules.user.components.widgets.*',
 
 			'common.modules.user.models.*',
 		));

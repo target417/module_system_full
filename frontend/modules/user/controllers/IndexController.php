@@ -106,7 +106,7 @@ class IndexController extends FrontController
     }
 
     /**
-     * Профиь пользователя.
+     * Профиль пользователя.
      * @param int $id Id пользователя
      * @return void
      */
@@ -127,7 +127,7 @@ class IndexController extends FrontController
             ));
         // Если профиль н епринадлежит текущему пользователю, начинаем кэширование.
         } else {
-            if($this->beginCache($id, array(
+            if($this->beginCache('userProfile', array(
                 'duration' => $this->module->cacheTime['profile'],
                 'varyByParam' => array(
                     'id',
@@ -274,10 +274,19 @@ class IndexController extends FrontController
             AND t.id = rFull.id
             AND t.id = rLastOnline.user
         ");
-
         if(!$record = $sql->queryRow())
             throw new CHttpException(404, self::EXCEPTION_WRONG_ADDRESS);
 
-        return $record;
+        // Формируем сущность.
+        $user = new EUser();
+        $user->id = $record['id'];
+        $user->login = $record['login'];
+        $user->sex = $record['sex'];
+        $user->name = $record['name'];
+        $user->birthday = $record['birthday'];
+        $user->dateReg = $record['date_reg'];
+        $user->lastOnline = $record['last_online'];
+
+        return $user;
     }
 }
