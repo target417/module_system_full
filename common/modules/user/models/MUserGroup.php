@@ -9,12 +9,6 @@
    `style` VARCHAR( 100 ) NULL ,
    `default` TINYINT( 1 ) NOT NULL DEFAULT('0') ,
    ) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
-
-   CREATE TABLE `user_group_rel` (
-   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-   `user` INT UNSIGNED NOT NULL ,
-   `group` INT UNSIGNED NOT NULL
-   ) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
  */
 class MUserGroup extends ActiveRecord
 {

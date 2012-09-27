@@ -26,7 +26,7 @@ class EUser extends Essence
      * Группы (роли).
      * @var array
      */
-    public $groups = null;
+    public $group = null;
 
     /**
      * Дата регистрации.
@@ -87,10 +87,12 @@ class EUser extends Essence
             $this->widget('WUSerLogin', array(
                 'id' => $this->id,
                 'login' => $this->login,
+                'style' => $this->group['style'],
             ));
         } else {
             $this->widget('WUSerLogin', array(
                 'login' => $this->login,
+                'style' => $this->group['style'],
             ));
         }
     }
@@ -105,12 +107,15 @@ class EUser extends Essence
     }
 
     /**
-     * Возвращает список групп (ролей) пользователя.
+     * Возвращает группу пользователя.
      * @return void
      */
-    public function getGroups()
+    public function getGroup()
     {
-
+        $this->widget(WUsergroup, array(
+            'group' => $this->group['group'],
+            'style' => $this->group['style']
+        ));
     }
 
     /**

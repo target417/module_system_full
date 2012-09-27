@@ -12,7 +12,7 @@ class UserModule extends WebModule
      * @var array
      */
     public $cacheTime = array(
-        'profile' => 600, // 10 мин.
+        'profile' => 0, // 10 мин.
     );
 
 	public function init()

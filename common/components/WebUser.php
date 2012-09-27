@@ -6,8 +6,18 @@ class WebUser extends CWebUser
      */
     public function getRole()
     {
-        if ($user = $this->getModel())
-            return MUserGroup::model()->getGroupInfoById($user->group, 'role');
+        if ($user = $this->getModel()) {
+             return Yii::app()->db->createCommand("
+                SELECT
+                    t.role
+                FROM
+                    user_group AS t,
+                    user
+                WHERE
+                    t.id = user.group
+                AND user.id = {$this->id}
+            ")->queryScalar();
+        }
     }
 
     /**

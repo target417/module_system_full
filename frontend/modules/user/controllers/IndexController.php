@@ -125,9 +125,11 @@ class IndexController extends FrontController
             $this->render('profile', array(
                 'user' => $this->loadUserData($id),
             ));
-        // Если профиль н епринадлежит текущему пользователю, начинаем кэширование.
+
+        // Если профиль не принадлежит текущему пользователю, начинаем кэширование.
         } else {
             if($this->beginCache('userProfile', array(
+                'cacheID' => 'memCache',
                 'duration' => $this->module->cacheTime['profile'],
                 'varyByParam' => array(
                     'id',
@@ -262,16 +264,20 @@ class IndexController extends FrontController
                 rFull.birthday,
                 rFull.sex,
                 rFull.name,
+                rGroup.group,
+                rGroup.style,
                 rLastOnline.last_online
             FROM
                 user as t,
                 user_full as rFull,
+                user_group as rGroup,
                 user_last_online as rLastOnline
             WHERE
                 t.id = {$id}
             AND t.is_confirm = 1
             AND t.is_remove = 0
             AND t.id = rFull.id
+            AND t.group = rGroup.id
             AND t.id = rLastOnline.user
         ");
         if(!$record = $sql->queryRow())
@@ -285,6 +291,10 @@ class IndexController extends FrontController
         $user->name = $record['name'];
         $user->birthday = $record['birthday'];
         $user->dateReg = $record['date_reg'];
+        $user->group = array(
+            'group' => $record['group'],
+            'style' => $record['style'],
+        );
         $user->lastOnline = $record['last_online'];
 
         return $user;

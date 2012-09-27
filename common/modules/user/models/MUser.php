@@ -7,6 +7,7 @@
    `login` VARCHAR( 20 ) NOT NULL ,
    `password` VARCHAR( 32 ) NOT NULL ,
    `email` VARCHAR( 100 ) NOT NULL ,
+    `group` INT UNSIGNED NOY NULL ,
    `theme` TINYINT UNSIGNED NULL ,
    `cookies_solt` INT UNSIGNED NULL ,
    `is_confirm` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT '0',
@@ -68,6 +69,8 @@ class MUser extends ActiveRecord
             array('theme', 'numerical'),
             array('theme', 'default', 'value' => $this->getDefaultTheme()),
 
+            array('group', 'default', 'value' => MUserGroup::getDefault()),
+
             array('saveMe', 'numerical'),
 
             // Регистрация нового пользователя.
@@ -96,6 +99,7 @@ class MUser extends ActiveRecord
             'login' => 'Логин',
             'password' => 'Пароль',
             'email' => 'E-mail',
+            'group' => 'Группа',
             'password2' => 'Повтор пароля',
             'theme' => 'Тема оформления',
             'is_confirm' => 'Активирован',
@@ -130,9 +134,9 @@ class MUser extends ActiveRecord
                 'id',
             ),
             'rGroup' => array(
-                self::MANY_MANY,
+                self::BELONGS_TO,
                 'MUserGroup',
-                'user_group_rel(user, group)',
+                'group',
             ),
         );
     }

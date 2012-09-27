@@ -7,6 +7,7 @@ return array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Администратор',
         'children' => array(
+            'user',
         ),
         'bizRule' => null,
         'data' => null,
