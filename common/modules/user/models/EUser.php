@@ -96,20 +96,13 @@ class EUser extends Essence
      * @param bool $withStyle Если true, то логин оформляется в соответствии со стилем группы
      * @return void
      */
-    public function getLogin($isLink = true, $withStyle = true)
+    public function getLogin()
     {
-        if($isLink === true) {
-            $this->widget('WUSerLogin', array(
-                'id' => $this->id,
-                'login' => $this->login,
-                'style' => $this->groupStyle,
-            ));
-        } else {
-            $this->widget('WUSerLogin', array(
-                'login' => $this->login,
-                'style' => $this->groupStyle,
-            ));
-        }
+        $this->widget('WUSerLogin', array(
+            'id' => $this->id,
+            'login' => $this->login,
+        ));
+
     }
 
     /**
@@ -127,7 +120,9 @@ class EUser extends Essence
      */
     public function getGroup()
     {
-        
+        ?><span class="user-group" style="<?php echo $this->groupStyle; ?>">
+            <?php echo $this->groupName; ?>
+        </span><?php
     }
 
     /**

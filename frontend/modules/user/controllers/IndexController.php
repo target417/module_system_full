@@ -118,7 +118,7 @@ class IndexController extends FrontController
         } else {
             if($this->beginCache('userProfile', array(
                 'cacheID' => 'memCache',
-                'duration' => $this->module->cacheTime['profile'],
+                'duration' => $this->module->getParams()->cacheTime['profile'],
                 'varyByParam' => array(
                     'id',
                 ),
@@ -293,13 +293,13 @@ class IndexController extends FrontController
             SELECT
                 t.id,
                 t.login,
-                rFull.date_reg,
+                rFull.date_reg AS dateReg,
                 rFull.birthday,
                 rFull.sex,
                 rFull.name,
-                rGroup.group,
-                rGroup.style,
-                rLastOnline.last_online
+                rGroup.group AS groupName,
+                rGroup.style AS groupStyle,
+                rLastOnline.last_online AS lastOnline
             FROM
                 user as t,
                 user_full as rFull,
@@ -318,17 +318,7 @@ class IndexController extends FrontController
 
         // Формируем сущность.
         $user = new EUser();
-        $user->id = $record['id'];
-        $user->login = $record['login'];
-        $user->sex = $record['sex'];
-        $user->name = $record['name'];
-        $user->birthday = $record['birthday'];
-        $user->dateReg = $record['date_reg'];
-        $user->group = array(
-            'group' => $record['group'],
-            'style' => $record['style'],
-        );
-        $user->lastOnline = $record['last_online'];
+        $user->attributes = $record;
 
         return $user;
     }

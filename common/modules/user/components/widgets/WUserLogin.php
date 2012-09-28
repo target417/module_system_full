@@ -18,12 +18,6 @@ class WUserLogin extends Widget
     public $id = null;
 
     /**
-     * CSS-стиль группы.
-     * @var string
-     */
-    public $style = null;
-
-    /**
      * Тип ссылки на профиль.
      * - "link" - Полная ссылка
      * - "ajax" - Всплывающее окно
@@ -36,36 +30,18 @@ class WUserLogin extends Widget
      */
     public function run()
     {
-
-
-        if($this->id !== null) {
-            $str = '<span class="user-login">';
-
+        if(!empty($this->id)) {
             switch($this->linkType) {
                 case 'link' :
-                    $str .= '<a href="'
-                    . Yii::app()->createUrl('user/index/profile', array('id' => $this->id))
-                    . '"';
-
-                    if($this->style !== null)
-                        $str .= ' style="' . $this->style . '"';
-
-                    $str .= '>';
-                    break;
+                    ?>
+                    <a href="<?php echo Yii::app()->createUrl('user/index/profile', array('id'=>$thid->id));?>" class="user-login">
+                        <?php echo $this->login; ?>
+                    </a>
+                    <?php
             }
         } else {
-            if($this->style !== null)
-                $str = '<span class="user-login">';
-            else
-                $str = '<span class="user-login">';
+            ?><span class="user-login"><?php echo $this->login; ?></span><?php
         }
-
-        $str .= $this->login;
-
-        if($this->id !== null)
-            $str .= '</a>';
-
-        $str .= '</span>';
 
         echo $str;
     }
