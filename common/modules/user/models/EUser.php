@@ -11,6 +11,12 @@ class EUser extends Essence
     public $id = null;
 
     /**
+     * Cостояние активации пользователя.
+     * @var int
+     */
+    public $isConfirm;
+
+    /**
      * Логин.
      * @var string
      */
@@ -23,10 +29,16 @@ class EUser extends Essence
     public $email = null;
 
     /**
-     * Группы (роли).
-     * @var array
+     * Название группы (роли).
+     * @var string
      */
-    public $group = null;
+    public $groupName = null;
+
+    /**
+     * CSS-стиль группы (роли).
+     * @var string
+     */
+    public $groupStyle = null;
 
     /**
      * Дата регистрации.
@@ -81,20 +93,21 @@ class EUser extends Essence
     /**
      * Возвращает логин пользователя.
      * @param bool $isLink Если true, то выводит логин в виде ссылки, иначе в виде такста
+     * @param bool $withStyle Если true, то логин оформляется в соответствии со стилем группы
      * @return void
      */
-    public function getLogin($isLink = true)
+    public function getLogin($isLink = true, $withStyle = true)
     {
         if($isLink === true) {
             $this->widget('WUSerLogin', array(
                 'id' => $this->id,
                 'login' => $this->login,
-                'style' => $this->group['style'],
+                'style' => $this->groupStyle,
             ));
         } else {
             $this->widget('WUSerLogin', array(
                 'login' => $this->login,
-                'style' => $this->group['style'],
+                'style' => $this->groupStyle,
             ));
         }
     }
@@ -114,10 +127,7 @@ class EUser extends Essence
      */
     public function getGroup()
     {
-        $this->widget(WUsergroup, array(
-            'group' => $this->group['group'],
-            'style' => $this->group['style']
-        ));
+        
     }
 
     /**
@@ -172,5 +182,25 @@ class EUser extends Essence
             echo LDateTime::formatDate($this->birthday);
         else
             echo 'Не указан';
+    }
+
+    /**
+     * Возвращает состояние активации.
+     * @return void
+     */
+    public function getConfirm()
+    {
+        if($this->isConfirm == 1)
+            echo 'Активирован';
+        else
+            echo 'Не активирован';
+    }
+
+    /**
+     * @see Essence::__construct()
+     */
+    public function __construct($class = __CLASS__)
+    {
+        parent::__construct($class);
     }
 }

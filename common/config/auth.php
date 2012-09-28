@@ -9,7 +9,7 @@ return array(
         'children' => array(
             'user',
 
-            'access_cms'
+            'user_access_cms'
         ),
         'bizRule' => null,
         'data' => null,
@@ -18,7 +18,6 @@ return array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Пользователь',
         'children' => array(
-            'access_cms'
         ),
         'bizRule' => null,
         'data' => null,
@@ -28,6 +27,16 @@ return array(
         'type' => CAuthItem::TYPE_TASK,
         'description' => 'Доступ к CMS',
         'children' => array(
+        ),
+        'bizRule' => null,
+        'data' => null,
+    ),
+
+    'user_access_cms' => array(
+        'type' => CAuthItem::TYPE_TASK,
+        'description' => 'Доступ к CMS',
+        'children' => array(
+            'access_cms',
         ),
         'bizRule' => null,
         'data' => null,

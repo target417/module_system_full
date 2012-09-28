@@ -50,6 +50,19 @@ abstract class Controller extends CController
     protected $_pageKeyWords;
 
     /**
+     * @see CController::beforeAction()
+     */
+    protected function beforeAction($action)
+    {
+        if(!parent::beforeAction($action))
+            return false;
+
+        $this->createPageParams();
+
+        return true;
+    }
+
+    /**
      * Ajax валидация форм.
      * @param object $model Модель, которую надо проверить
      * @return void

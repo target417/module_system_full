@@ -7,7 +7,7 @@
    `group` VARCHAR( 25 ) NOT NULL ,
    `role` VARCHAR( 25 ) NOT NULL ,
    `style` VARCHAR( 100 ) NULL ,
-   `default` TINYINT( 1 ) NOT NULL DEFAULT('0') ,
+   `is_default` TINYINT( 1 ) NOT NULL DEFAULT('0') ,
    ) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
  */
 class MUserGroup extends ActiveRecord
@@ -19,7 +19,7 @@ class MUserGroup extends ActiveRecord
      */
     static public function getDefault()
     {
-        $record = MUserGroup::model()->find('t.default = 1');
+        $record = MUserGroup::model()->find('t.is_default = 1');
 
         return $record->id;
     }
