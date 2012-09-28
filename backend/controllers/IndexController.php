@@ -52,6 +52,9 @@ final class Indexcontroller extends BackController
      */
     protected function createPageParams()
     {
-
+        switch($this->action->id) {
+            case 'index' :
+                break;
+        }
     }
 }

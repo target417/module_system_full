@@ -1,20 +1,20 @@
 <?php
 /*
- * Входной контроллер пользовательской части.
+ * Входной контроллер модуля.
  */
-final class Indexcontroller extends FrontController
+class IndexController extends BackController
 {
     /**
-     * Входной экшен.
+     * Главная страница модуля.
      * @return void
      */
     public function actionIndex()
     {
-        echo 'FrontEnd is start...';
+
     }
 
     /**
-     * @see Controller::createPageParams()
+     * @see Conctroller::createPageParams()
      */
     protected function createPageParams()
     {

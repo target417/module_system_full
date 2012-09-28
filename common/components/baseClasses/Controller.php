@@ -11,8 +11,10 @@ abstract class Controller extends CController
     /**
      * Формирование индивидуальных параметров страницы:
      * Формирование метатегов, подключение js- и css- файлов.
-     * @return bolean True в сучае успеха, иначе - false
+     * Так же здесь необходимо по возможности проводить все проверки прав.
+     * Внутри должны описываться все actions. Если действие не нужно - указать явно (в комментарии).
      * @abstract
+     * @return bool
      */
     abstract protected function createPageParams();
 

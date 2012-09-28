@@ -221,7 +221,7 @@ class IndexController extends FrontController
      * Окончание востановления забытого пароля.
      * @return void
      */
-    public function actionrestorePasswordOk()
+    public function actionRestorePasswordOk()
     {
         $this->render('restorePasswordOk');
     }
@@ -266,19 +266,6 @@ class IndexController extends FrontController
             throw new CHttpException(404, self::EXC_WRONG_ADDRESS);
         }
 	}
-
-    /**
-     * @see Controller::createPageParams()
-     */
-    protected function createPageParams()
-    {
-        switch($this->action->id) {
-            case 'editprofile' :
-                if(Yii::app()->user->isGuest)
-                    $this->redirect(Yii::app()->user->loginUrl);
-                break;
-       }
-    }
 
     /**
      * Проверка существования указанного e-mail адреса.
@@ -357,5 +344,41 @@ class IndexController extends FrontController
         return $this->renderPartial('dynamicUserMenu', array(
             'id' => $id,
         ), true);
+    }
+
+    /**
+     * @see Controller::createPageParams()
+     */
+    protected function createPageParams()
+    {
+        switch($this->action->id) {
+            case 'registration' :
+                // break;
+
+            case 'registrationok' :
+                break;
+
+            case 'login' :
+                break;
+
+            // logout - Не требуется.
+
+            case 'profile' :
+                break;
+
+            case 'editprofile' :
+                if(Yii::app()->user->isGuest)
+                    $this->redirect(Yii::app()->user->loginUrl);
+                break;
+
+            case 'restorepassword' :
+                // break;
+
+            case 'restorepasswordok' :
+                break;
+
+            case 'emailconfirm' :
+                break;
+        }
     }
 }
