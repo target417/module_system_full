@@ -9,4 +9,10 @@ return array(
 		'backend.components.*',
 		'backend.models.*',
 	),
+
+    'components' => array(
+        'user' => array(
+            'loginUrl' => '/backend/www/index/login',
+        ),
+    ),
 );

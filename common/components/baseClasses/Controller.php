@@ -5,8 +5,8 @@
 abstract class Controller extends CController
 {
 
-    const EXCEPTION_NO_ACCESS = 'Не достаточно прав для выполнения сценария';
-    const EXCEPTION_WRONG_ADDRESS = 'Неверно указан адрес страницы';
+    const EXC_NO_ACCESS = 'Не достаточно прав для выполнения сценария';
+    const EXC_WRONG_ADDRESS = 'Неверно указан адрес страницы';
 
     /**
      * Формирование индивидуальных параметров страницы:

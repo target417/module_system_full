@@ -106,7 +106,7 @@ class IndexController extends FrontController
         else if(!Yii::app()->user->isGuest)
             $id = Yii::app()->user->id;
         else
-            throw new CHttpException(404, self::EXCEPTION_WRONG_ADDRESS);
+            throw new CHttpException(404, self::EXC_WRONG_ADDRESS);
 
         // Если это профиль текущего пользователя, кэширование не начинаем.
         if(!Yii::app()->user->isGuest && (Yii::app()->user->id === $id)) {
@@ -263,7 +263,7 @@ class IndexController extends FrontController
 
             $this->redirect(Yii::app()->homeUrl);
         } else {
-            throw new CHttpException(404, self::EXCEPTION_WRONG_ADDRESS);
+            throw new CHttpException(404, self::EXC_WRONG_ADDRESS);
         }
 	}
 
@@ -273,7 +273,7 @@ class IndexController extends FrontController
     protected function createPageParams()
     {
         switch($this->action->id) {
-            case 'editProfile' :
+            case 'editprofile' :
                 if(Yii::app()->user->isGuest)
                     $this->redirect(Yii::app()->user->loginUrl);
                 break;
@@ -327,7 +327,7 @@ class IndexController extends FrontController
             AND t.id = rLastOnline.user
         ");
         if(!$record = $sql->queryRow())
-            throw new CHttpException(404, self::EXCEPTION_WRONG_ADDRESS);
+            throw new CHttpException(404, self::EXC_WRONG_ADDRESS);
 
         // Формируем сущность.
         $user = new EUser();
