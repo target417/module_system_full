@@ -45,7 +45,7 @@ class MUserFull extends ActiveRecord
     {
         return array(
             array('name', 'length', 'max' => 25),
-            array('name', 'match', 'pattern' => '/^([а-яa-z0-9 _\-]+)$/i'),
+            array('name', 'match', 'pattern' => '/^([а-яa-z0-9 _\-]+)$/iu'),
 
             array('sex', 'in', 'range' => array('Мужской', 'Женский')),
 

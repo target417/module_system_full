@@ -80,7 +80,7 @@ class MUser extends ActiveRecord
     {
         return array(
             array('login', 'length', 'min' => 6, 'max' => 16),
-            array('login', 'match', 'pattern' => '/^([a-z0-9 _\-]+|[а-я0-9 _\-]+)$/i'),
+            array('login', 'match', 'pattern' => '/^(a-z0-9 _\-]+|[а-я0-9 _\-]+)$/iu'),
 
             array('password, newPassword', 'length', 'min' => 6),
 

@@ -29,18 +29,6 @@ class IndexController extends FrontController
 
                 $this->checkEmail($user->id, $user->email);
 
-                // Присваиваем пользователю группу по умолччанию.
-                $group = MUserGroup::getDefault();
-
-                Yii::app()->db->createCommand("
-                    INSERT INTO user_group_rel(
-                        `user`,
-                        `group`)
-                    VALUES (
-                        {$user->id},
-                        {$group})
-                ")->execute();
-
                 // Делаем запись о последнем посещении.
                 Yii::app()->db->createCommand("
                 INSERT INTO user_last_online(
