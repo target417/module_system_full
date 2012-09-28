@@ -12,7 +12,7 @@ abstract class ActiveRecord extends CActiveRecord
 	abstract public function attributeNotes();
 
 	/**
-	 * Возвращает примечание для указанного аттрибета.
+	 * Возвращает примечание для указанного аттрибута.
 	 * @param string $attribute Аттрибут
 	 * @return string Строка примечания
 	 */

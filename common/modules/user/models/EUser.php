@@ -73,7 +73,9 @@ class EUser extends Essence
      */
     public function getAvatar()
     {
-
+        $this->widget('WUserAvatar', array(
+            'id' => $this->id,
+        ));
     }
 
     /**
@@ -142,7 +144,7 @@ class EUser extends Essence
      */
     public function getName()
     {
-        if(isset($this->name))
+        if(!empty($this->name))
             echo $this->name;
         else
             echo 'Не указанно';
@@ -154,7 +156,7 @@ class EUser extends Essence
      */
     public function getSex()
     {
-        if(isset($this->sex))
+        if(!empty($this->sex))
             echo $this->sex;
         else
             echo 'Не указан';
@@ -166,7 +168,7 @@ class EUser extends Essence
      */
     public function getBirthday()
     {
-        if(isset($this->berthday))
+        if(!empty($this->birthday))
             echo LDateTime::formatDate($this->birthday);
         else
             echo 'Не указан';

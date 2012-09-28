@@ -10,6 +10,8 @@ $globalConfig = require_once('common' . DIRECTORY_SEPARATOR . 'config' . DIRECTO
 // Инициализируем алиасы.
 $root = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..';
 Yii::setPathOfAlias('root', $root);
+
+Yii::setPathOfAlias('media', $root . DIRECTORY_SEPARATOR . 'media');
 Yii::setPathOfAlias('common', $root . DIRECTORY_SEPARATOR . 'common');
 Yii::setPathOfAlias('backend', $root . DIRECTORY_SEPARATOR . 'backend');
 Yii::setPathOfAlias('www', $root. DIRECTORY_SEPARATOR . 'backend' . DIRECTORY_SEPARATOR . 'www');

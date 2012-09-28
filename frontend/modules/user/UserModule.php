@@ -7,14 +7,6 @@
  */
 class UserModule extends WebModule
 {
-    /**
-     * Время кэширования.
-     * @var array
-     */
-    public $cacheTime = array(
-        'profile' => 0, // 10 мин.
-    );
-
 	public function init()
 	{
 		$this->setImport(array(
@@ -23,5 +15,20 @@ class UserModule extends WebModule
 
 			'common.modules.user.models.*',
 		));
-	}
+
+        // Инициализация переменных.
+        $this->setParams(array(
+            // Место расположения аватаров пользователей.
+            'avatarsDir' => Yii::getPathOfAlias('media') . DIRECTORY_SEPARATOR . $this->id . DIRECTORY_SEPARATOR . 'avatars',
+            'avatarsDirHtml' => '/media/user/avatars',
+            
+            'defaultAvatar' => Yii::getPathOfAlias('media') . DIRECTORY_SEPARATOR . $this->id . DIRECTORY_SEPARATOR . 'avatars' . DIRECTORY_SEPARATOR . 'default.png',
+            'defaultAvatarHtml' => '/media/user/avatars/default.png',
+
+            // время кэширования.
+            'cacheTime' => array(
+                'profile' => 0, // 10 мин.
+            ),
+        ));
+    }
 }

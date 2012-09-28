@@ -27,6 +27,29 @@ class MUser extends ActiveRecord
      * @var string
      */
     public $password2;
+    /**
+	 * Текущий пароль.
+	 * @var string
+	 */
+	public $oldPassword;
+
+	/**
+	 * Новый пароль.
+	 * @var string
+	 */
+	public $newPassword;
+
+	/**
+	 * повторный ввод нового пароля.
+	 * @var string
+	 */
+	public $newPassword2;
+
+	/**
+	 * Файл аватара пользователя.
+	 * @var file
+	 */
+	public $img;
 
     /**
      * Капча.
@@ -59,19 +82,21 @@ class MUser extends ActiveRecord
             array('login', 'length', 'min' => 6, 'max' => 16),
             array('login', 'match', 'pattern' => '/^([a-z0-9 _\-]+|[а-я0-9 _\-]+)$/i'),
 
-            array('password', 'length', 'min' => 6),
+            array('password, newPassword', 'length', 'min' => 6),
 
             array('email', 'length', 'max' => 100),
             array('email', 'match', 'pattern' => '/^[a-z0-9\-_\.]+@[a-z0-9\-_\.]+.[a-z]{2,5}$/iu'),
 
             array('is_confirm, is_remove', 'default', 'value' => 0),
 
-            array('theme', 'numerical'),
+            array('theme', 'in', 'range' => $this->getThemesList('id')),
             array('theme', 'default', 'value' => $this->getDefaultTheme()),
 
             array('group', 'default', 'value' => MUserGroup::getDefault()),
 
             array('saveMe', 'numerical'),
+
+            array('img', 'ImageValidator', 'mime' => array('image/jpg', 'image/jpeg'), 'maxWidth' => 150, 'maxHeight' => 150),
 
             // Регистрация нового пользователя.
             array('login, email, password, password2', 'required', 'on' => 'registration'),
@@ -87,6 +112,13 @@ class MUser extends ActiveRecord
             array('login, email, verifyCode', 'required', 'on' => 'restorePassword'),
 			array('login', 'checkUserByEmail', 'on' => 'restorePassword'),
 			array('verifyCode', 'captcha', 'allowEmpty' => !extension_loaded('gd'), 'on' => 'restorePassword'),
+
+            // Редактирвоание личных данных.
+			array('email', 'required', 'on' => 'editProfile'),
+			array('email', 'unique', 'on' => 'editProfile'),
+
+			array('newPassword2', 'compare', 'compareAttribute'=>'newPassword', 'on' => 'editProfile'),
+			array('oldPassword', 'checkOldPassword', 'on' => 'editProfile'),
         );
     }
 
@@ -106,6 +138,10 @@ class MUser extends ActiveRecord
             'is_remove' => 'Удален',
             'save_me' => 'Запомнить меня',
             'verifyCode' => 'Код проверки',
+            'img' => 'Аватар',
+            'oldPassword' => 'Текущий пароль',
+            'newPassword' => 'Новый пароль',
+            'newPassword2' => 'Повтор пароля',
         );
     }
 
@@ -119,6 +155,8 @@ class MUser extends ActiveRecord
             'password' => 'Не меньше 6 символов.',
             'email' => 'Потребуется для активаии аккаунта',
             'verifyCode' => 'Решите уравнение.',
+            'img' => '.jpeg максимум 150x150',
+            'newPassword' => 'Не меньше 6 символов.',
         );
     }
 
@@ -173,8 +211,18 @@ class MUser extends ActiveRecord
     }
 
     /**
+	 * Проверка правильности текущего пароля.
+     * Метод валидации.
+	 */
+	public function checkOldPassword()
+	{
+		if($this->oldPassword && ($this->password != $this->passwordCript($this->oldPassword)))
+			$this->addError('oldPassword', 'Неверно указан текущий пароль.');
+	}
+
+    /**
 	 * Проверка наличия пользователя с указанными логином и email адресом.
-     * метод валидации.
+     * Метод валидации.
 	 */
 	public function checkUserByEmail()
 	{
@@ -200,17 +248,48 @@ class MUser extends ActiveRecord
     }
 
     /**
-     * Тема по умолчанию.
-     * @var int
+     * Возвращает список тем в виде одномерного массива.
+     * @return array
      */
-    private $_defaultTheme = 1;
+    public function getThemesList()
+    {
+        $list = $this->_themesList;
+
+        while($item = each($list))
+            $return[] = $item[0];
+
+        return $return;
+    }
+
+    /**
+     * Возвращает список тем для Ddl.
+     * @return array
+     */
+    public function getThemesListForDdl()
+    {
+        return $this->_themesList;
+    }
 
     /**
      * Возвращает тему по умолчанию.
      * @return int
      */
-    private function getDefaultTheme()
+    public function getDefaultTheme()
     {
         return $this->_defaultTheme;
     }
+
+    /**
+     * Список тем.
+     * @var array
+     */
+    protected $_themesList = array(
+        1 => 'Упрощенная',
+    );
+
+    /**
+     * Тема по умолчанию.
+     * @var int
+     */
+    protected $_defaultTheme = 1;
 }

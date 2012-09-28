@@ -40,7 +40,6 @@ return array(
 
         'user' => array(
             'class' => 'WebUser',
-            'loginUrl' => '/user/login',
             'allowAutoLogin' => true,
         ),
 

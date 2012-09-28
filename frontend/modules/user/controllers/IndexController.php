@@ -145,6 +145,59 @@ class IndexController extends FrontController
     }
 
     /**
+     * Редактирование профиля пользователя.
+     * @return void
+     */
+    public function actionEditProfile()
+    {
+        $id = Yii::app()->user->id;
+
+        $user = MUser::model()->findByPk($id);
+		$userFull = MUserFull::model()->findByPk($id);
+		$user->scenario = $userFull->scenario = 'editProfile';
+
+        if(isset($_POST['MUser']) && isset($_POST['MUserFull'])) {
+            $oldEmail = $user->email;
+            $user->attributes = $_POST['MUser'];
+            $userFull->attributes = $_POST['MUserFull'];
+
+            if($this->multipleValidate(array($user, $userFull))) {
+				// Если email был изменен - высылаем письмо с подтверждением..
+				if($oldEmail != $user->email) {
+					$this->checkEmail($id, $user->email);
+					$user->email = $oldEmail;
+				}
+
+				// если был введен новый пароль - меняем его.
+				if($user->oldPassword && $user->newPassword && $user->newPassword2)
+					$user->password = $user->passwordCript($user->newPassword);
+
+				// Удаляем аватар, если указанно.
+                $avatarDir = $this->module->getParams()->avatarsDir . DIRECTORY_SEPARATOR . $user->id . '.jpg';
+
+				if(!$_POST['deleteAvatar']) {
+					if($user->img = CUploadedFile::getInstance($user, 'img')) {
+						$user->img->saveAs($avatarDir);
+					}
+				} else {
+					if(file_exists($avatarDir))
+						unlink($avatarDir);
+				}
+
+				$user->save(false);
+				$userFull->save(false);
+
+				$this->redirect(Yii::app()->createUrl('user/index/profile'));
+			}
+        }
+
+        $this->render('editProfile', array(
+            'user' => $user,
+            'userFull' => $userFull,
+        ));
+    }
+
+    /**
      * Востановление забытого пароля.
      * @return void
      */
@@ -231,7 +284,12 @@ class IndexController extends FrontController
      */
     protected function createPageParams()
     {
-
+        switch($this->action->id) {
+            case 'editProfile' :
+                if(Yii::app()->user->isGuest)
+                    $this->redirect(Yii::app()->user->loginUrl);
+                break;
+       }
     }
 
     /**
@@ -254,7 +312,7 @@ class IndexController extends FrontController
      * @param int $id Id пользователя
      * @return array
      */
-    private function loadUserData($id)
+    protected function loadUserData($id)
     {
         $sql = Yii::app()->db->createCommand("
             SELECT
@@ -298,5 +356,18 @@ class IndexController extends FrontController
         $user->lastOnline = $record['last_online'];
 
         return $user;
+    }
+
+    /**
+     * Формирование пользовательского меню.
+     * @see CController::renderDynamic()
+     * @param int $id Id пользователя, чей профиль просматривается
+     * @return string Код для отображения в представлении
+     */
+    protected function dynamicUserMenu($id)
+    {
+        return $this->renderPartial('dynamicUserMenu', array(
+            'id' => $id,
+        ), true);
     }
 }

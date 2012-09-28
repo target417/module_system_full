@@ -14,6 +14,15 @@
 class MUserFull extends ActiveRecord
 {
     /**
+     * Список полов.
+     * @var array
+     */
+    public $sexList = array(
+        'Мужской' => 'Мужской',
+        'Женский' => 'Женский',
+    );
+
+    /**
      * @see CActiveRecord::model()
      */
     public static function model($className=__CLASS__)
@@ -40,7 +49,7 @@ class MUserFull extends ActiveRecord
 
             array('sex', 'in', 'range' => array('Мужской', 'Женский')),
 
-            array('birthday', 'match', 'pattern' => '/^\d\d\.\d\d\.\d\d\d\d$/'),
+            array('birthday', 'match', 'pattern' => '/^\d\d\d\d-\d\d-\d\d$/'),
 
             array('date_reg', 'default', 'value' => new CDbExpression('NOW()')),
         );
@@ -65,7 +74,7 @@ class MUserFull extends ActiveRecord
         return array(
             'name' => 'До 25 символов.',
             'sex' => '',
-            'birthday' => 'В формате дд.мм.гггг',
+            'birthday' => 'В формате гггг-мм-дд',
         );
     }
 

@@ -9,4 +9,10 @@ return array(
 		'frontend.components.*',
 		'frontend.models.*',
 	),
+
+    'components' => array(
+        'user' => array(
+            'loginUrl' => '/frontend/www/user/index/login',
+        ),
+    ),
 );
