@@ -7,17 +7,24 @@ class IndexController extends BackController
     /**
      * Главная страница модуля.
      * @param string $group Группа пользователей
+     * @param string $searchString Строка дял поиска логина
      * @return void
      */
-    public function actionIndex($group = null)
+    public function actionIndex($group = null, $searchString = null)
     {
-        // Загрузка списка пользователей.
-        if(!empty($group)) {
-            $usersList = $this->loadUsersList('group', (int)$group);
-        } else {
-            $usersList = $this->loadUsersList();
-        }
+        // Загрузка списка групп.
+        $groupsList = $this->loadGroupsList();
 
+        // Загрузка списка пользователей.
+        if(!empty($group))
+            $param['group'] = (int)$group;
+
+        if(!empty($searchString))
+            $param['searchString'] = $searchString;
+
+        $usersList = $this->loadUsersList($param);
+        // -----<<
+        
         $this->render('index', array(
             'usersList' => $usersList,
             'groupsList' => $groupsList,
@@ -26,12 +33,30 @@ class IndexController extends BackController
     }
 
     /**
+     * загрузка списка групп из БД.
+     * @return array
+     */
+    protected function loadGroupsList()
+    {
+        $return = Yii::app()->db->createCommand("
+            SELECT
+                t.group,
+                t.id
+            FROM
+                user_group AS t
+            ORDER BY
+                t.group
+        ")->queryAll();
+
+        return $return;
+    }
+
+    /**
      * Загрузка списка пользователей из БД.
-     * @param string $param Параметр, по которому осуществляется поиск
-     * @param mixed $value Значение этого параметра
+     * @param array $param Значения параметров дя поиска
      * @return array Массив с сущностями пользователей
      */
-    protected function loadUsersList($param = null, $value = null)
+    protected function loadUsersList($param = null)
     {
         $sql = Yii::app()->db->createCommand()
             ->select(array(
@@ -51,18 +76,23 @@ class IndexController extends BackController
             ->leftJoin('user_last_online AS rLastOnline', 'rLastOnline.user = t.id')
             ->order('t.login');
 
-        switch($param) {
-            case 'group' :
-                $sqlConditions = 'rGroup.id = :group';
-                $sqlParams = array(
-                    ':group' => $value,
-                );
+        // Добавляем переданные пользователей условия выборки.
+        if(!empty($param)) {
+            $sqlConditions = array('and');
 
-                $sql->where($sqlConditions, $sqlParams);
-                break;
+            // Группа пользователя.
+            if(isset($param['group'])) {
+                $sqlConditions[] = 'rGroup.id = :group';
+                $sqlParams[':group'] = $param['group'];
+            }
 
-            default :
-                break;
+            // Поиск по логину.
+            if(isset($param['searchString'])) {
+                $sqlConditions[] = 't.login LIKE :search';
+                $sqlParams[':search'] = '%' . $param['searchString'] . '%';
+            }
+
+            $sql->where($sqlConditions, $sqlParams);
         }
 
         $result = $sql->queryAll();
@@ -71,7 +101,6 @@ class IndexController extends BackController
         while($item = each($result)) {
             $user = new EUser();
             $user->attributes = $item[1];
-
             $return[] = $user;
         }
 
