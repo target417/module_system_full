@@ -11,4 +11,5 @@ abstract class Model extends CModel
     {
 
     }
+
 }

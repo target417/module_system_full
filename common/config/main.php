@@ -19,11 +19,15 @@ return array(
         'common.components.validators.*',
 
         'common.models.*',
-        'common.modules.user.models.*',
+
+        // Следующие две модели необходимы для проверок уровня доступа.
+        'common.modules.user.models.MUser',
+        'common.modules.user.models.MUserGroup',
     ),
 
     'modules' => array(
         'user',
+        'anime',
     ),
 
     'components' => array(
@@ -55,7 +59,7 @@ return array(
             'showScriptName' => false,
             'urlSuffix' => '.html',
             'rules' => array(
-                
+
             ),
         ),
 
