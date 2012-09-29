@@ -1,6 +1,6 @@
 <?php
 /*
- * Жвнры ание-релизов.
+ * Жанры ание-релизов.
  */
 class MAnimeGenre extends Model
 {
