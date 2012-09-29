@@ -12,14 +12,18 @@ abstract class BackController extends Controller
         if(!parent::beforeAction($action))
             return false;
 
-        // Перенаправляет неавторизированных пользователей на страницу авторизации.
-        // Если пользователь авторизирован, проверяем наличие прав для доступа к CSM.
-        if(Yii::app()->user->isGuest && ($this->id != 'index' || $action->id != 'login')) {
-            $this->redirect(Yii::app()->user->loginUrl);
-        } else {
-            if(!Yii::app()->user->checkAccess('access_cms'))
+        // Если пользователь - гость, перенаправляет на страницу авторизации.
+       if(Yii::app()->user->isGuest) {
+           if($this->id != 'index' || $action->id != 'login')
+               $this->redirect(Yii::app()->user->loginUrl);
+       // Если пользователь авторизирован, но недостаточно прав для доступа к CMS,
+       // генерирует исключение и выбрасывает пользователя из системы.
+       } else {
+           if(!Yii::app()->user->checkAccess('access_cms')) {
+                Yii::app()->user->logout();
                 throw new CHttpException(404, self::EXC_NO_ACCESS);
-        }
+           }
+       }
 
         return true;
     }

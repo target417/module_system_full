@@ -55,7 +55,7 @@ class IndexController extends BackController
                 $user->is_confirm = $_POST['MUser']['is_confirm'];
 
             if($user->save())
-                $this->redirect(Yii::app()->createUrl('user/index/index')); 
+                $this->redirect(Yii::app()->createUrl('user/index/index'));
         }
 
         $this->render('editProfile', array(
@@ -72,9 +72,14 @@ class IndexController extends BackController
         $return = Yii::app()->db->createCommand("
             SELECT
                 t.group,
-                t.id
+                t.id,
+                count(rUser.id) AS countUsers
             FROM
                 user_group AS t
+            LEFT JOIN
+                user AS rUser ON(t.id = rUser.group)
+            GROUP BY
+                t.group
             ORDER BY
                 t.group
         ")->queryAll();

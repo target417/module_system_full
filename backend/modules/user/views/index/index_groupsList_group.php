@@ -4,5 +4,8 @@
             <?php echo $group['group']; ?>
         </a>
     </td>
+    <td>
+        <?php echo $group['countUsers']; ?>
+    </td>
 
 </tr>

@@ -21,13 +21,13 @@ class UserModule extends WebModule
             // Место расположения аватаров пользователей.
             'avatarsDir' => Yii::getPathOfAlias('media') . DIRECTORY_SEPARATOR . $this->id . DIRECTORY_SEPARATOR . 'avatars',
             'avatarsDirHtml' => '/media/user/avatars',
-            
+
             'defaultAvatar' => Yii::getPathOfAlias('media') . DIRECTORY_SEPARATOR . $this->id . DIRECTORY_SEPARATOR . 'avatars' . DIRECTORY_SEPARATOR . 'default.png',
             'defaultAvatarHtml' => '/media/user/avatars/default.png',
 
             // время кэширования.
             'cacheTime' => array(
-                'profile' => 0, // 10 мин.
+                'profile' => 0, // Профиль пользователя (10 мин).
             ),
         ));
     }

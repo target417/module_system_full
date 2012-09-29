@@ -3,6 +3,7 @@
         <thead>
             <tr>
                 <th>Группа</th>
+                <th>Пользователей</th>
             </tr>
         </thead>
         <tbody>
