@@ -23,6 +23,22 @@ class MUserGroup extends ActiveRecord
 
         return $record->id;
     }
+
+    /**
+     * Возвращает список групп для выпадающего списка.
+     * @return array
+     */
+    static public function getListForDdl()
+    {
+        $list = MUserGroup::model()->findAll(array(
+            'order' => 't.group',
+        ));
+
+        $return = CHtml::listData($list, 'id', 'group');
+
+        return $return;
+    }
+
     /**
      * @see CActiveForm::model()
      */

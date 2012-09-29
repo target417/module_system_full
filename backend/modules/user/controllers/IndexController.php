@@ -24,12 +24,43 @@ class IndexController extends BackController
 
         $usersList = $this->loadUsersList($param);
         // -----<<
-        
+
         $this->render('index', array(
             'usersList' => $usersList,
             'groupsList' => $groupsList,
         ));
 
+    }
+
+    /**
+     * Редактирование профиля пользователя.
+     * @param int $id Id редактируемог пользователя
+     * @return void
+     */
+    public function actionEditProfile($id)
+    {
+        $id = (int)$id;
+
+        if(!$user = MUser::model()->findByPk($id))
+            throw new CHttpException(404, self::EXC_WRONG_ADDRESS);
+
+        $user->scenario = 'adminProfile';
+
+        if(isset($_POST['MUser'])) {
+            if(Yii::app()->user->checkAccess('user_admin_profile_login'))
+                $user->login = $_POST['MUser']['login'];
+            if(Yii::app()->user->checkAccess('user_admin_profile_group'))
+                $user->group = $_POST['MUser']['group'];
+            if(Yii::app()->user->checkAccess('user_admin_profile_confirm'))
+                $user->is_confirm = $_POST['MUser']['is_confirm'];
+
+            if($user->save())
+                $this->redirect(Yii::app()->createUrl('user/index/index')); 
+        }
+
+        $this->render('editProfile', array(
+            'user' => $user,
+        ));
     }
 
     /**
@@ -115,6 +146,11 @@ class IndexController extends BackController
         switch($this->action->id) {
             case 'index' :
                 if(!Yii::app()->user->checkAccess('user_access_cms'))
+                    throw new CHttpException(404, self::EXC_NO_ACCESS);
+                break;
+
+            case 'editprofile' :
+                if(!Yii::app()->user->checkAccess('user_admin_profile'))
                     throw new CHttpException(404, self::EXC_NO_ACCESS);
                 break;
         }
