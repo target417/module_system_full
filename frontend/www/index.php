@@ -1,4 +1,8 @@
 <?php
+// Инициализируем глобальные константы.
+const FRONTEND_URL = 'http://moduleSystem.loc/frontend/www';
+const BACKEND_URL = 'http://moduleSystem.loc/backend/www';
+
 // Устанавливаем текущую директорию в корень сайта.
 chdir(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..');
 
@@ -16,7 +20,8 @@ Yii::setPathOfAlias('frontend', $root . DIRECTORY_SEPARATOR . 'frontend');
 Yii::setPathOfAlias('www', $root. DIRECTORY_SEPARATOR . 'frontend' . DIRECTORY_SEPARATOR . 'www');
 
 // Создаем приложение.
-$app = Yii::createApplication('CWebApplication', CMap::mergeArray($globalConfig, $frontConfig));
+require_once('common' . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'baseClasses' . DIRECTORY_SEPARATOR . 'WebApplication.php');
+$app = Yii::createApplication('WebApplication', CMap::mergeArray($globalConfig, $frontConfig));
 $app->run();
 
 // Дебаг.

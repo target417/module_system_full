@@ -34,7 +34,7 @@ class WUserLogin extends Widget
             switch($this->linkType) {
                 case 'link' :
                     ?>
-                    <a href="<?php echo Yii::app()->createUrl('user/index/profile', array('id'=>$thid->id));?>" class="user-login">
+                    <a href="<?php echo Yii::app()->createFrontUrl('user/index/profile', array('id'=>$this->id));?>" class="user-login">
                         <?php echo $this->login; ?>
                     </a>
                     <?php
