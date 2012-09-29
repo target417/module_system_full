@@ -1,6 +1,6 @@
 <?php
 /**
- * разделы аниме-релизов.
+ * Разделы аниме-релизов.
  */
 class MAnimeSection extends Model
 {
@@ -28,6 +28,29 @@ class MAnimeSection extends Model
     }
 
     /**
+     * Возвращает список разделов для выпадающег осписка.
+     * @return array
+     */
+    public function getListForDdl()
+    {
+        $list = $this->getList();
+
+        foreach($list AS $item) {
+            if($item['parent'] == 0) {
+                $parent = &$return[$item['name']];
+
+                foreach($list AS $children) {
+                    if($children['parent'] == $item['id']) {
+                        $parent[$children['id']] = $children['name'];
+                    }
+                }
+            }
+        }
+
+        return $return;
+    }
+
+    /**
      * Список разделов аниме.
      * Разделы хранятся в виде двухуровневого ассоциативного массива.
      * Первый уровень - разделы-контейнеры, которые не могут содержать в себе релизов.
@@ -35,17 +58,17 @@ class MAnimeSection extends Model
      * @var array
      */
     protected $_list = array(
-        1 =>array('id' => 1, 'name' => 'Аниме с озвучкой', url => 'anime-rus', 'parent' => 0),
-        11 =>array('id' => 11, 'name' => 'ТВ-сериалы', url => 'tv-rus', 'parent' => 1),
-        12 =>array('id' => 12, 'name' => 'Фильмы', url => 'film-rus', 'parent' => 1),
-        13 =>array('id' => 13, 'name' => 'OVA', url => 'ova-rus', 'parent' => 1),
-        14 =>array('id' => 14, 'name' => 'онгоинги', url => 'obgoing-rus', 'parent' => 1),
+        1  => array('id' => 1,  'name' => 'Аниме с озвучкой', url => 'anime-rus',   'parent' => 0),
+        11 => array('id' => 11, 'name' => 'ТВ-сериалы',       url => 'tv-rus',      'parent' => 1),
+        12 => array('id' => 12, 'name' => 'Фильмы',           url => 'film-rus',    'parent' => 1),
+        13 => array('id' => 13, 'name' => 'OVA',              url => 'ova-rus',     'parent' => 1),
+        14 => array('id' => 14, 'name' => 'Онгоинги',         url => 'obgoing-rus', 'parent' => 1),
 
-        2 =>array('id' => 2, 'name' => 'Аниме с субтитрами', url => 'anime-sub', 'parent' => 0),
-        21 =>array('id' => 11, 'name' => 'ТВ-сериалы', url => 'tv-sub', 'parent' => 2),
-        22 =>array('id' => 12, 'name' => 'Фильмы', url => 'film-sub', 'parent' => 2),
-        23 =>array('id' => 13, 'name' => 'OVA', url => 'ova-sub', 'parent' => 2),
-        24 =>array('id' => 14, 'name' => 'онгоинги', url => 'obgoing-sub', 'parent' => 2),
+        2  => array('id' => 2,  'name' => 'Аниме с субтитрами', url => 'anime-sub',   'parent' => 0),
+        21 => array('id' => 11, 'name' => 'ТВ-сериалы',         url => 'tv-sub',      'parent' => 2),
+        22 => array('id' => 12, 'name' => 'Фильмы',             url => 'film-sub',    'parent' => 2),
+        23 => array('id' => 13, 'name' => 'OVA',                url => 'ova-sub',     'parent' => 2),
+        24 => array('id' => 14, 'name' => 'Онгоинги',           url => 'obgoing-sub', 'parent' => 2),
     );
 
     /**

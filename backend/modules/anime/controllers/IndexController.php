@@ -11,7 +11,10 @@ class IndexController extends BackController
      */
     public function actionIndex()
     {
-      
+        echo '<pre>';
+        print_r(MAnimeGenre::model());
+        echo '</pre>';
+        echo '<a href="'.Yii::app()->createUrl('/', array('id'=>'слово')).'">asd</a>';
     }
 
     /**
