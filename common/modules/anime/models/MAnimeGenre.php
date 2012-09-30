@@ -19,6 +19,26 @@ class MAnimeGenre extends Model
     }
 
     /**
+     * Возвращает список жанров.
+     * @param string $attribute Если указан, возвращает однмерный массив с этим аттрибутом,
+     * иначе возвращает полный список жанров
+     * @return array
+     */
+    public function getList($attribute = null)
+    {
+        $list = $this->_list;
+
+        if(!empty($attribute)) {
+            foreach($list AS $item) {
+                $return[$item['id']] = $item[$attribute];
+            }
+        } else {
+            $return = $list;
+        }
+
+        return $return;
+    }
+    /**
      * Список жанров аниме.
      * @var aaray
      */

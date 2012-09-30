@@ -11,10 +11,16 @@ class IndexController extends BackController
      */
     public function actionIndex()
     {
-        echo '<pre>';
-        print_r(MAnimeGenre::model());
-        echo '</pre>';
-        echo '<a href="'.Yii::app()->createUrl('/', array('id'=>'слово')).'">asd</a>';
+
+    }
+
+    /**
+     * Добавление нового аниме.
+     * @return void
+     */
+    public function actionAddAnime()
+    {
+
     }
 
     /**
@@ -27,6 +33,11 @@ class IndexController extends BackController
                 if(!Yii::app()->user->checkAccess('anime_access_cms'))
                     throw new CHttpException(404, self::EXC_NO_ACCESS);
                 break;
+
+             case 'addanime' :
+                 if(!Yii::app()->user->checkAccess('anime_admin_add_anime'))
+                    throw new CHttpException(404, self::EXC_NO_ACCESS);
+                 break;
         }
     }
 }

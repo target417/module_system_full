@@ -16,7 +16,7 @@ return array(
             'user_admin_profile_group',
             'user_admin_profile_confirm',
 
-            'anime_access_cms',
+            'anime_admin_add_anime',
         ),
         'bizRule' => null,
         'data' => null,
@@ -105,6 +105,16 @@ return array(
         'description' => 'Доступ к CMS',
         'children' => array(
             'access_cms',
+        ),
+        'bizRule' => null,
+        'data' => null,
+    ),
+
+    'anime_admin_add_anime' => array(
+        'type' => CAuthItem::TYPE_TASK,
+        'description' => 'добавление аниме через cms',
+        'children' => array(
+            'anime_access_cms',
         ),
         'bizRule' => null,
         'data' => null,
