@@ -81,7 +81,18 @@ class MAnime extends ActiveRecord
     public function attributeLabels()
     {
         return array(
-
+            'headline' => 'Заголовок',
+            'section' => 'Раздел',
+            'type' => 'Тип релиза',
+            'edition_begin' => 'Трансляция (начало)',
+            'edition_end' => 'Трансляция (конец)',
+            'edition_details' => 'Трансляция (детали)',
+            'description' => 'Описание',
+            'tracker_info' => 'информация о трекере',
+            'subs_lang' => 'Субтитры (язык)',
+            'subs_author' => 'Субтитры (автор)',
+            'dub_lang' => 'Озвучка (язык)',
+            'dub_author' => 'Озвучка (автор)',
         );
     }
 
@@ -100,6 +111,45 @@ class MAnime extends ActiveRecord
      */
     public function relations()
     {
-
+        return array(
+            'rAuthor' => array(
+                self::BELONGS_TO,
+                'MUser',
+                'author',
+            ),
+        );
     }
+
+    /**
+     * Возвращает список языков озвучки.
+     * @return array
+     */
+    public static function getDubLangsList()
+    {
+        return MAnime::$_dubLangsList;
+    }
+
+    /**
+     * Возвращает список языков озвучки для выпадающего списка.
+     * @return array
+     */
+    public static function getDubLangsListForDdl()
+    {
+        $list = MAnime::getDubLangsList();
+
+        foreach($list AS $item) {
+            $return[$item['id']] = $item['ruName'];
+        }
+
+        return $return;
+    }
+
+    /**
+     * Список языков озвучки.
+     * @var array
+     */
+    protected static $_dubLangsList = array(
+        1 => array('id' => 1, 'ruName' => 'Русский', 'enName' => 'ru'),
+        2 => array('id' => 2, 'ruName' => 'Японский', 'enName' => 'jp'),
+    );
 }

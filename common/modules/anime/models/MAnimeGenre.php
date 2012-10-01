@@ -38,6 +38,7 @@ class MAnimeGenre extends Model
 
         return $return;
     }
+
     /**
      * Список жанров аниме.
      * @var aaray

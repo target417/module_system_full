@@ -5,7 +5,6 @@
     'focus' => array($user, 'login'),
 )); ?>
 
-    <?php echo CHtml::errorSummary($user); ?>
     <div class="row">
         <?php echo $form->label($user, 'login'); ?>
         <?php echo $form->textField($user, 'login'); ?>

@@ -20,7 +20,16 @@ class IndexController extends BackController
      */
     public function actionAddAnime()
     {
+        $anime = new MAnime();
+        $anime->scenario = 'add';
 
+        if(isset($_POST['MAnime'])) {
+
+        }
+
+        $this->render('addAnime', array(
+            'anime' => $anime,
+        ));
     }
 
     /**
