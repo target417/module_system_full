@@ -24,7 +24,11 @@ class IndexController extends BackController
         $anime->scenario = 'add';
 
         if(isset($_POST['MAnime'])) {
+            $anime->attributes = $_POST['MAnime'];
 
+            if($anime->validate()) {
+                $anime->save();
+            }
         }
 
         $this->render('addAnime', array(

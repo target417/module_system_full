@@ -5,6 +5,7 @@
    CREATE TABLE `anime` (
    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
    `headline` VARCHAR( 250 ) NOT NULL ,
+   `url` VARCHAR( 250 ) NOT NULL ,
    `author` INT UNSIGNED NOT NULL ,
    `date_create` DATETIME NOT NULL ,
    `section` TINYINT UNSIGNED NOT NULL ,
@@ -65,6 +66,8 @@ class MAnime extends ActiveRecord
             array('edition_details', 'length', 'max' => 250),
             array('edition_details', 'match', 'pattern' => '/^[a-zа-я0-9\-_ \[\]\(\)\.\,]+$/is'),
 
+            array('full_name', 'length', 'max' => 2000),
+
             array('description', 'length', 'max' => 10000),
 
             array('tracker_info', 'length', 'max' => 2000),
@@ -72,6 +75,9 @@ class MAnime extends ActiveRecord
             array('dub_lang, subs_lang', 'numerical'),
 
             array('dub_author, subs_author', 'length', 'max' => 100),
+
+            // Добавление нвоого аниме.
+            array('headline, description, section', 'required', 'on' => 'add'),
         );
     }
 
@@ -87,6 +93,7 @@ class MAnime extends ActiveRecord
             'edition_begin' => 'Трансляция (начало)',
             'edition_end' => 'Трансляция (конец)',
             'edition_details' => 'Трансляция (детали)',
+            'full_name' => 'Название (вариянты)',
             'description' => 'Описание',
             'tracker_info' => 'информация о трекере',
             'subs_lang' => 'Субтитры (язык)',
@@ -145,11 +152,43 @@ class MAnime extends ActiveRecord
     }
 
     /**
+     * Возвращает список языков субтитров.
+     * @return array
+     */
+    public static function getSubsLangsList()
+    {
+        return MAnime::$_subsLangsList;
+    }
+
+    /**
+     * Возвращает список языков субтитров для выпадающего списка.
+     * @return array
+     */
+    public static function getSubsLangsListForDdl()
+    {
+        $list = MAnime::getSubsLangsList();
+
+        foreach($list AS $item) {
+            $return[$item['id']] = $item['ruName'];
+        }
+
+        return $return;
+    }
+
+    /**
      * Список языков озвучки.
      * @var array
      */
     protected static $_dubLangsList = array(
         1 => array('id' => 1, 'ruName' => 'Русский', 'enName' => 'ru'),
         2 => array('id' => 2, 'ruName' => 'Японский', 'enName' => 'jp'),
+    );
+
+    /**
+     * Список язвков субтитров.
+     * @var array
+     */
+    protected static $_subsLangsList = array(
+        1 => array('id' => 1, 'ruName' => 'Русский', 'enName' => 'ru'),
     );
 }
