@@ -32,10 +32,17 @@ class MAnime extends ActiveRecord
     public $cover;
 
     /**
-     * Файл скриншота.
+     * Файлы скриншотов.
      * var file
      */
-    public $screen;
+    public $screen_1;
+    public $screen_2;
+    public $screen_3;
+    public $screen_4;
+    public $screen_5;
+    public $screen_6;
+    public $screen_7;
+    public $screen_8;
 
     /**
      * @see CActiveRecord::model()
@@ -90,7 +97,7 @@ class MAnime extends ActiveRecord
 
             array('cover', 'ImageValidator',  'minWidth' => 300, 'minHeight' => 500, 'mime' => array('image/jpg', 'image/jpeg'), 'safe' => false),
 
-            array('screen', 'ImageValidator',  'minWidth' => 300, 'minHeight' => 500, 'mime' => array('image/jpg', 'image/jpeg'), 'safe' => false),
+            array('screen_1, screen_2, screen_3, screen_4, screen_5, screen_6, screen_7, screen_8, ', 'ImageValidator',  'minWidth' => 300, 'minHeight' => 500, 'mime' => array('image/jpg', 'image/jpeg'), 'safe' => false),
 
             // Добавление нвоого аниме.
             array('headline, description, section', 'required', 'on' => 'add'),
@@ -229,11 +236,27 @@ class MAnime extends ActiveRecord
             // Сохраняем новые.
             $this->cover = $cover;
             $this->cover->saveAs($coverDirBig);
-
             LImage::resizeImage($coverDirSmall, $coverDirBig, 'in', array(240, 340));
         }
 
-        //Сохраняем скриншоты.
+        // Сохраняем скриншоты.
+        for($i = 1; $i <= 8; $i++) {
+            if($screen = CUploadedFile::getInstance($this, 'screen_' . $i)) {echo 1;
+                $screenDirBig = Yii::app()->controller->getModule()->getParams()->screensDir . DIRECTORY_SEPARATOR . $this->id . '_'. $i . '_big.jpg';
+                $screenDirSmall = Yii::app()->controller->getModule()->getParams()->screensDir . DIRECTORY_SEPARATOR . $this->id . '_'. $i  . '_small.jpg';
+
+                // Удаляем старые скриншоты.
+                if(is_file($screenDirBig))
+                    unlink($screenDirBig);
+                if(is_file($screenDirSmall))
+                    unlink($screenDirSmall);
+
+                // Сохраняем новые.
+                $this->screen = $screen;
+                $this->screen->saveAs($screenDirBig);
+                LImage::resizeImage($screenDirSmall, $screenDirBig, 'in', array(240, 340));
+            }
+        }
 
         return true;
     }

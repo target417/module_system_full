@@ -40,9 +40,58 @@
 
     <div class="row">
         <?php echo $form->labelEx($anime, 'screen'); ?>
-        <?php echo $form->fileField($anime, 'screen'); ?>
+        <?php echo $form->fileField($anime, 'screen_1'); ?>
         <?php echo $form->note($anime, 'screen'); ?>
-        <?php echo $form->error($anime, 'screen'); ?>
+        <?php echo $form->error($anime, 'screen_1'); ?>
+    </div>
+
+    <div class="row">
+        <span class="label"></span>
+        <?php echo $form->fileField($anime, 'screen_2'); ?>
+        <?php echo $form->note($anime, 'screen'); ?>
+        <?php echo $form->error($anime, 'screen_2'); ?>
+    </div>
+
+    <div class="row">
+        <span class="label"></span>
+        <?php echo $form->fileField($anime, 'screen_3'); ?>
+        <?php echo $form->note($anime, 'screen'); ?>
+        <?php echo $form->error($anime, 'screen_3'); ?>
+    </div>
+
+    <div class="row">
+        <span class="label"></span>
+        <?php echo $form->fileField($anime, 'screen_4'); ?>
+        <?php echo $form->note($anime, 'screen'); ?>
+        <?php echo $form->error($anime, 'screen_4'); ?>
+    </div>
+
+    <div class="row">
+        <span class="label"></span>
+        <?php echo $form->fileField($anime, 'screen_5'); ?>
+        <?php echo $form->note($anime, 'screen'); ?>
+        <?php echo $form->error($anime, 'screen_5'); ?>
+    </div>
+
+    <div class="row">
+        <span class="label"></span>
+        <?php echo $form->fileField($anime, 'screen_6'); ?>
+        <?php echo $form->note($anime, 'screen'); ?>
+        <?php echo $form->error($anime, 'screen_6'); ?>
+    </div>
+
+    <div class="row">
+        <span class="label"></span>
+        <?php echo $form->fileField($anime, 'screen_7'); ?>
+        <?php echo $form->note($anime, 'screen'); ?>
+        <?php echo $form->error($anime, 'screen_7'); ?>
+    </div>
+
+    <div class="row">
+        <span class="label"></span>
+        <?php echo $form->fileField($anime, 'screen_8'); ?>
+        <?php echo $form->note($anime, 'screen'); ?>
+        <?php echo $form->error($anime, 'screen_8'); ?>
     </div>
 
     <div class="row long">

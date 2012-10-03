@@ -23,6 +23,10 @@ class AnimeModule extends WebModule
             'coversDir' => Yii::getPathOfAlias('media') . DIRECTORY_SEPARATOR . $this->id . DIRECTORY_SEPARATOR . 'covers',
             'avatarsDirHtml' => '/media/anime/covers',
 
+            // Место расположения скриншотов релизов.
+            'screensDir' => Yii::getPathOfAlias('media') . DIRECTORY_SEPARATOR . $this->id . DIRECTORY_SEPARATOR . 'screens',
+            'screensDirHtml' => '/media/anime/screens',
+
             // время кэширования.
             'cacheTime' => array(
 
