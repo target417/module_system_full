@@ -3,6 +3,9 @@
 <?php $form = $this->beginWidget('ActiveForm', array(
     'enableClientValidation' => true,
     'focus' => array($anime, 'headline'),
+    'htmlOptions' => array(
+        'enctype' => 'multipart/form-data'
+    ),
 )); ?>
 
     <div class="row long">
@@ -28,6 +31,12 @@
         <?php echo $form->error($anime, 'full_name'); ?>
     </div>
 
+    <div class="row">
+        <?php echo $form->labelEx($anime, 'cover'); ?>
+        <?php echo $form->fileField($anime, 'cover'); ?>
+        <?php echo $form->note($anime, 'cover'); ?>
+        <?php echo $form->error($anime, 'cover'); ?>
+    </div>
     <div class="row long">
         <?php echo $form->label($anime, 'description'); ?>
         <?php echo $form->textarea($anime, 'description', array(

@@ -19,9 +19,13 @@ class AnimeModule extends WebModule
 
         // Инициализация переменных.
         $this->setParams(array(
+            // Место расположения обложек релизов.
+            'coversDir' => Yii::getPathOfAlias('media') . DIRECTORY_SEPARATOR . $this->id . DIRECTORY_SEPARATOR . 'covers',
+            'avatarsDirHtml' => '/media/anime/covers',
+
             // время кэширования.
             'cacheTime' => array(
-                
+
             ),
         ));
     }

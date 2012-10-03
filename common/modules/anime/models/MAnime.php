@@ -26,6 +26,12 @@
 class MAnime extends ActiveRecord
 {
     /**
+     * Файл обложки.
+     * @var file
+     */
+    public $cover;
+
+    /**
      * @see CActiveRecord::model()
      */
     public static function model($className=__CLASS__)
@@ -76,6 +82,8 @@ class MAnime extends ActiveRecord
 
             array('dub_author, subs_author', 'length', 'max' => 100),
 
+            array('cover', 'ImageValidator',  'minWidth' => 300, 'minHeight' => 500, 'mime' => array('image/jpg', 'image/jpeg'), 'safe' => false),
+
             // Добавление нвоого аниме.
             array('headline, description, section', 'required', 'on' => 'add'),
         );
@@ -100,6 +108,7 @@ class MAnime extends ActiveRecord
             'subs_author' => 'Субтитры (автор)',
             'dub_lang' => 'Озвучка (язык)',
             'dub_author' => 'Озвучка (автор)',
+            'cover' => 'Обложка',
         );
     }
 
@@ -191,4 +200,25 @@ class MAnime extends ActiveRecord
     protected static $_subsLangsList = array(
         1 => array('id' => 1, 'ruName' => 'Русский', 'enName' => 'ru'),
     );
+
+    /**
+     * @see CActiveRecord::afterSave()
+     */
+    protected function afterSave()
+    {
+        // Сохраняем обложку.
+        if($cover = CUploadedFile::getInstance($this, 'cover')) {
+            $coverDirBig = Yii::app()->controller->getModule()->getParams()->coversDir . DIRECTORY_SEPARATOR . $this->id . '_big.jpg';
+            $coverDirSmall = Yii::app()->controller->getModule()->getParams()->coversDir . DIRECTORY_SEPARATOR . $this->id . '_small.jpg';
+
+            //    $this->deleteDocument(); // старый документ удалим, потому что загружаем новый
+
+            $this->cover = $cover;
+            $this->cover->saveAs($coverDirBig);
+
+            LImage::resizeImage($coverDirSmall, $coverDirBig, 'in', array(240, 340));
+        }
+
+        return true;
+    }
 }
