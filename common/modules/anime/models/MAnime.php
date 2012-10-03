@@ -32,6 +32,12 @@ class MAnime extends ActiveRecord
     public $cover;
 
     /**
+     * Файл скриншота.
+     * var file
+     */
+    public $screen;
+
+    /**
      * @see CActiveRecord::model()
      */
     public static function model($className=__CLASS__)
@@ -84,6 +90,8 @@ class MAnime extends ActiveRecord
 
             array('cover', 'ImageValidator',  'minWidth' => 300, 'minHeight' => 500, 'mime' => array('image/jpg', 'image/jpeg'), 'safe' => false),
 
+            array('screen', 'ImageValidator',  'minWidth' => 300, 'minHeight' => 500, 'mime' => array('image/jpg', 'image/jpeg'), 'safe' => false),
+
             // Добавление нвоого аниме.
             array('headline, description, section', 'required', 'on' => 'add'),
         );
@@ -109,6 +117,7 @@ class MAnime extends ActiveRecord
             'dub_lang' => 'Озвучка (язык)',
             'dub_author' => 'Озвучка (автор)',
             'cover' => 'Обложка',
+            'screen' => 'Скриншоты',
         );
     }
 
@@ -211,13 +220,20 @@ class MAnime extends ActiveRecord
             $coverDirBig = Yii::app()->controller->getModule()->getParams()->coversDir . DIRECTORY_SEPARATOR . $this->id . '_big.jpg';
             $coverDirSmall = Yii::app()->controller->getModule()->getParams()->coversDir . DIRECTORY_SEPARATOR . $this->id . '_small.jpg';
 
-            //    $this->deleteDocument(); // старый документ удалим, потому что загружаем новый
+            // Удаляем старые обложки.
+            if(is_file($coverDirBig))
+                unlink($coverDirBig);
+            if(is_file($coverDirSmall))
+                unlink($coverDirSmall);
 
+            // Сохраняем новые.
             $this->cover = $cover;
             $this->cover->saveAs($coverDirBig);
 
             LImage::resizeImage($coverDirSmall, $coverDirBig, 'in', array(240, 340));
         }
+
+        //Сохраняем скриншоты.
 
         return true;
     }

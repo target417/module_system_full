@@ -37,6 +37,14 @@
         <?php echo $form->note($anime, 'cover'); ?>
         <?php echo $form->error($anime, 'cover'); ?>
     </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($anime, 'screen'); ?>
+        <?php echo $form->fileField($anime, 'screen'); ?>
+        <?php echo $form->note($anime, 'screen'); ?>
+        <?php echo $form->error($anime, 'screen'); ?>
+    </div>
+
     <div class="row long">
         <?php echo $form->label($anime, 'description'); ?>
         <?php echo $form->textarea($anime, 'description', array(
@@ -103,7 +111,7 @@
     </div>
 
     <div class="row submit">
-        <?php echo CHtml::submitButton('Добавить аниме'); ?>
+        <?php echo CHtml::submitButton($anime->isNewRecord ? 'Добавить аниме' : 'Сохранить изменения'); ?>
     </div>
 
 <?php $this->endWidget(); ?>
