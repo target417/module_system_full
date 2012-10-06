@@ -54,6 +54,9 @@ abstract class Controller extends CController
      */
     protected function beforeAction($action)
     {
+        // Потом удалить.
+        Yii::app()->getClientScript()->registerCoreScript('jquery');
+
         if(!parent::beforeAction($action))
             return false;
 

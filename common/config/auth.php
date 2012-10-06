@@ -19,6 +19,7 @@ return array(
             'guestbook_admin_message_text',
             'guestbook_admin_message_answer',
             'guestbook_admin_message_author',
+            'guestbook_admin_message_remove',
 
 
             'anime_admin_add_anime',
@@ -144,6 +145,15 @@ return array(
             'guestbook_admin_message_answer' => array(
                 'type' => CAuthItem::TYPE_TASK,
                 'description' => 'Редактироване текста ответа',
+                'children' => array(
+                    'guestbook_admin_message',
+                ),
+                'bizRule' => null,
+                'data' => null,
+            ),
+            'guestbook_admin_message_remove' => array(
+                'type' => CAuthItem::TYPE_TASK,
+                'description' => 'Удаление сообщения',
                 'children' => array(
                     'guestbook_admin_message',
                 ),

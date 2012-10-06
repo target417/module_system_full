@@ -21,7 +21,7 @@ class IndexController extends BackController
      * @param int @id Id редактируемого сообщения.
      * @return void
      */
-    public function actioneditMessage($id)
+    public function actionEditMessage($id)
     {
         $id = (int)$id;
 
@@ -45,6 +45,30 @@ class IndexController extends BackController
         $this->render('editMessage', array(
             'message' => $message,
         ));
+    }
+
+    /**
+     * Удаление сообщения.
+     * @param int $id Id удаляемого сообщения.
+     * @return void
+     */
+    public function actionAjaxRemoveMessage($id)
+    {
+        $id = (int)$id;
+
+        $sql = Yii::app()->db->createCommand("
+            UPDATE
+                guestbook
+            SET
+                is_remove = 1
+            WHERE
+                id = {$id}
+        ");
+
+        if($sql->execute())
+            echo 'true';
+        else
+            echo 'false';
     }
 
     /**
@@ -92,6 +116,11 @@ class IndexController extends BackController
 
             case 'editmessage' :
                 if(!Yii::app()->user->checkAccess('guestbook_admin_message'))
+                    throw new CHttpException(404, self::EXC_NO_ACCESS);
+                break;
+
+            case 'ajaxRemoveMessage': 
+                if(!Yii::app()->user->checkAccess('guestbook_admin_message_remove'))
                     throw new CHttpException(404, self::EXC_NO_ACCESS);
                 break;
         }
