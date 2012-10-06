@@ -28,6 +28,7 @@ return array(
     'modules' => array(
         'user',
         'anime',
+        'guestbook',
     ),
 
     'components' => array(

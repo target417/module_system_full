@@ -23,11 +23,6 @@ class MUser extends ActiveRecord
     public $saveMe;
 
     /**
-     * Повторный ввод пароля.
-     * @var string
-     */
-    public $password2;
-    /**
 	 * Текущий пароль.
 	 * @var string
 	 */
@@ -99,9 +94,8 @@ class MUser extends ActiveRecord
             array('img', 'ImageValidator', 'mime' => array('image/jpg', 'image/jpeg'), 'maxWidth' => 150, 'maxHeight' => 150),
 
             // Регистрация нового пользователя.
-            array('login, email, password, password2', 'required', 'on' => 'registration'),
+            array('login, email, password', 'required', 'on' => 'registration'),
             array('login, email', 'unique', 'on' => 'registration'),
-            array('password2', 'compare', 'compareAttribute' => 'password', 'on' => 'registration', 'message' => 'Ошибка пр иповторе пароля.'),
 			array('verifyCode', 'captcha', 'allowEmpty' => !extension_loaded('gd'), 'on' => 'registration'),
 
             // Вход в систему.
@@ -132,7 +126,6 @@ class MUser extends ActiveRecord
             'password' => 'Пароль',
             'email' => 'E-mail',
             'group' => 'Группа',
-            'password2' => 'Повтор пароля',
             'theme' => 'Тема оформления',
             'is_confirm' => 'Активирован',
             'is_remove' => 'Удален',

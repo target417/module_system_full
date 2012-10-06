@@ -20,12 +20,6 @@
     </div>
 
     <div class="row">
-        <?php echo $form->label($user, 'password2'); ?>
-        <?php echo $form->passwordField($user, 'password2'); ?>
-        <?php echo $form->error($user, 'password2'); ?>
-    </div>
-
-    <div class="row">
         <?php echo $form->label($user, 'email'); ?>
         <?php echo $form->textField($user, 'email'); ?>
         <?php echo $form->note($user, 'email'); ?>

@@ -1,0 +1,1 @@
+<a href="<?php echo Yii::app()->createUrl('guestbook/index/addMessage'); ?>">Добавить сообщение</a>
