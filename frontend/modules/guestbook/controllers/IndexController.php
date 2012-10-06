@@ -25,10 +25,8 @@ class IndexController extends Frontcontroller
         if(isset($_POST['MGuestbook'])) {
             $message->attributes = $_POST['MGuestbook'];
 
-            if($message->save()) {
+            if($message->save())
                 $this->redirect(Yii::app()->createUrl('guestbook/index/index'));
-            }
-
         }
 
         $this->render('addMessage', array(
