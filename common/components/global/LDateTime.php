@@ -29,7 +29,7 @@ class LDateTime
         $month = substr($date, 5, 2);
         $day = substr($date, 8, 2);
 
-        if($format === 2)
+        if($format === 3)
             $alwaysFull = true;
 
         // Формируем названия месяцев.

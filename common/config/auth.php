@@ -16,6 +16,11 @@ return array(
             'user_admin_profile_group',
             'user_admin_profile_confirm',
 
+            'guestbook_admin_message_text',
+            'guestbook_admin_message_answer',
+            'guestbook_admin_message_author',
+
+
             'anime_admin_add_anime',
         ),
         'bizRule' => null,
@@ -92,6 +97,55 @@ return array(
                 'description' => 'Редактирование активации',
                 'children' => array(
                     'user_admin_profile',
+                ),
+                'bizRule' => null,
+                'data' => null,
+            ),
+
+/**
+ * МОДУЛЬ "GUESTBOOK"
+ */
+    'guestbook_access_cms' => array(
+        'type' => CAuthItem::TYPE_TASK,
+        'description' => 'Доступ к CMS',
+        'children' => array(
+            'access_cms',
+        ),
+        'bizRule' => null,
+        'data' => null,
+    ),
+    'guestbook_admin_message' => array(
+        'type' => CAuthItem::TYPE_TASK,
+        'description' => 'Редактироване сообщения',
+        'children' => array(
+            'guestbook_access_cms',
+        ),
+        'bizRule' => null,
+        'data' => null,
+    ),
+            'guestbook_admin_message_author' => array(
+                'type' => CAuthItem::TYPE_TASK,
+                'description' => 'Редактироване автора сообщения',
+                'children' => array(
+                    'guestbook_admin_message',
+                ),
+                'bizRule' => null,
+                'data' => null,
+            ),
+            'guestbook_admin_message_text' => array(
+                'type' => CAuthItem::TYPE_TASK,
+                'description' => 'Редактироване текста сообщения',
+                'children' => array(
+                    'guestbook_admin_message',
+                ),
+                'bizRule' => null,
+                'data' => null,
+            ),
+            'guestbook_admin_message_answer' => array(
+                'type' => CAuthItem::TYPE_TASK,
+                'description' => 'Редактироване текста ответа',
+                'children' => array(
+                    'guestbook_admin_message',
                 ),
                 'bizRule' => null,
                 'data' => null,

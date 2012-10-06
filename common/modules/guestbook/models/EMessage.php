@@ -77,8 +77,8 @@ class EMessage extends Essence
      */
     public function getDatecreate()
     {
-        if(!empty($this->datecreate))
-            echo LDateTime::formatDate($this->dateCreate, true);
+        if(!empty($this->dateCreate))
+            echo LDateTime::formatDate($this->dateCreate, true, false, 3);
     }
 
     /**
