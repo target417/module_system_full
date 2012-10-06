@@ -3,7 +3,7 @@
  * Модуль пользовательского функционала.
  *
  * @author пикаев Виктор <target417@gmail.com>
- * @version 2.0
+ * @version 1.0 beta
  */
 class UserModule extends WebModule
 {
@@ -27,7 +27,7 @@ class UserModule extends WebModule
 
             // время кэширования.
             'cacheTime' => array(
-                
+
             ),
         ));
     }

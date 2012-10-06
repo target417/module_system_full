@@ -3,7 +3,7 @@
  * Модуль гостевой книги.
  *
  * @author пикаев Виктор <target417@gmail.com>
- * @version 1.0
+ * @version 1.0 beta
  */
 class GuestbookModule extends WebModule
 {
@@ -20,7 +20,7 @@ class GuestbookModule extends WebModule
         $this->setParams(array(
             // время кэширования.
             'cacheTime' => array(
-                
+
             ),
         ));
     }
