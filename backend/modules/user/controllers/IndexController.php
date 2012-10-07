@@ -26,7 +26,8 @@ class IndexController extends BackController
         // -----<<
 
         $this->render('index', array(
-            'usersList' => $usersList,
+            'usersList' => $usersList[0],
+            'pages' => $usersList[1],
             'groupsList' => $groupsList,
         ));
 
@@ -90,7 +91,9 @@ class IndexController extends BackController
     /**
      * Загрузка списка пользователей из БД.
      * @param array $param Значения параметров дя поиска
-     * @return array Массив с сущностями пользователей
+     * @return array
+     * 0 => Массив с сущностями пользователей
+     * 1 => Экземпляр сдасса Pagination
      */
     protected function loadUsersList($param = null)
     {
@@ -131,6 +134,13 @@ class IndexController extends BackController
             $sql->where($sqlConditions, $sqlParams);
         }
 
+        // Разделяем на страницы.
+        $countSql = clone $sql;
+        $count = $countSql->select('COUNT(t.id)')->queryScalar();
+        $pages = new Pagination($count);
+        $pages->pageSize = $this->module->getParams()->usersOnPage;
+        $sql->limit($pages->pageSize, $pages->currentPage * $pages->pageSize);
+
         $result = $sql->queryAll();
 
         // Формируем сущности.
@@ -140,7 +150,7 @@ class IndexController extends BackController
             $return[] = $user;
         }
 
-        return $return;
+        return array($return, $pages);
     }
 
     /**

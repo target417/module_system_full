@@ -6,6 +6,8 @@
             'message' => $message,
         ));
     }
+
+    $this->widget('LinkPager', array('pages'=>$pages));
 } else { ?>
     <p>В гостевой книге нет ни одного сообщения</p>
 <?php } ?>

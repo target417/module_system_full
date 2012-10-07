@@ -3,4 +3,5 @@
 <!-- Список сообщений -->
 <?php $this->renderPartial('index_messagesList', array(
     'messagesList' => $messagesList,
+    'pages' => $pages,
 )); ?>

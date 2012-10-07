@@ -18,6 +18,8 @@
             } ?>
         </tbody>
     </table>
+
+    <?php $this->widget('LinkPager', array('pages'=>$pages)) ?>
 <?php } else { ?>
     <p>В гостевой книге нет ни одного сообщения</p>
 <?php } ?>

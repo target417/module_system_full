@@ -20,4 +20,5 @@
 <!-- Список пользователей -->
 <?php $this->renderPartial('index_usersList', array(
     'usersList' => $usersList,
+    'pages' => $pages,
 )); ?>

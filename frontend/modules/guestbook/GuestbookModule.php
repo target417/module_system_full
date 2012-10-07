@@ -18,6 +18,9 @@ class GuestbookModule extends WebModule
 
         // Инициализация переменных.
         $this->setParams(array(
+            // Колличество сообщений на странице.
+            'messagesOnPage' => 10,
+
             // время кэширования.
             'cacheTime' => array(
 

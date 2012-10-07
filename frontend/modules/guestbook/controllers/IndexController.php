@@ -13,7 +13,8 @@ class IndexController extends Frontcontroller
         $messagesList = $this->loadMessagesList();
 
         $this->render('index', array(
-            'messagesList' => $messagesList,
+            'messagesList' => $messagesList[0],
+            'pages' => $messagesList[1],
         ));
     }
 
@@ -41,6 +42,8 @@ class IndexController extends Frontcontroller
     /**
      * Загрузка списка сообщений из БД.
      * @return array
+     * 0 => Массив с сущностями сообщений
+     * 1 => Экземпляр сдасса Pagination
      */
     protected function loadMessagesList()
     {
@@ -57,6 +60,13 @@ class IndexController extends Frontcontroller
             ->where('t.is_remove = 0')
             ->order('t.date_create DESC');
 
+        // Разделяем на страницы.
+        $countSql = clone $sql;
+        $count = $countSql->select('COUNT(t.id)')->queryScalar();
+        $pages = new CPagination($count);
+        $pages->pageSize = $this->module->getParams()->messagesOnPage;
+        $sql->limit($pages->pageSize, $pages->currentPage * $pages->pageSize);
+
         $result = $sql->queryAll();
 
         // Формируем сущности.
@@ -66,7 +76,7 @@ class IndexController extends Frontcontroller
             $return[] = $message;
         }
 
-        return $return;
+        return array($return, $pages);
     }
 
     /**
