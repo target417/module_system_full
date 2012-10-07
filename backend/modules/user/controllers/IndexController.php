@@ -65,7 +65,49 @@ class IndexController extends BackController
     }
 
     /**
-     * загрузка списка групп из БД.
+     * Удаление пользователя.
+     * @param int $id Id удаляемог опользователя.
+     * @return void
+     */
+    public function actionRemoveUser($id)
+    {
+        $id = (int)$id;
+
+        $result = Yii::app()->db->createCommand("
+            SELECT
+                t.login
+            FROM
+                user AS t
+            WHERE
+                t.id = {$id}
+        ")->queryRow();
+
+        if(empty($result))
+            throw new CHttpException(404, self::EXC_WRONG_ADDRESS);
+
+        $user = new EUser();
+        $user->attributes = $result;
+
+        if(!empty($_POST)) {
+            Yii::app()->db->createCommand("
+                UPDATE
+                    user
+                SET
+                    is_remove = 1
+                WHERE
+                    id = {$id}
+            ")->execute();
+
+            $this->redirect(Yii::app()->createUrl('user/index/index'));
+        }
+
+        $this->render('removeUser', array(
+            'user' => $user,
+        ));
+    }
+
+    /**
+     * Загрузка списка групп из БД.
      * @return array
      */
     protected function loadGroupsList()
@@ -164,8 +206,13 @@ class IndexController extends BackController
                     throw new CHttpException(404, self::EXC_NO_ACCESS);
                 break;
 
-            case 'editprofile' :
+            case 'editProfile' :
                 if(!Yii::app()->user->checkAccess('user_admin_profile'))
+                    throw new CHttpException(404, self::EXC_NO_ACCESS);
+                break;
+
+            case 'removeUser' :
+                if(!Yii::app()->user->checkAccess('user_admin_profile_remove', array('id' => (int)$_GET['id'])))
                     throw new CHttpException(404, self::EXC_NO_ACCESS);
                 break;
         }

@@ -15,6 +15,7 @@ return array(
             'user_admin_profile_login',
             'user_admin_profile_group',
             'user_admin_profile_confirm',
+            'user_admin_profile_remove',
 
             'guestbook_admin_message_text',
             'guestbook_admin_message_answer',
@@ -100,6 +101,15 @@ return array(
                     'user_admin_profile',
                 ),
                 'bizRule' => null,
+                'data' => null,
+            ),
+            'user_admin_profile_remove' => array(
+                'type' => CAuthItem::TYPE_OPERATION,
+                'description' => 'Удаление пользователя',
+                'children' => array(
+                    'user_admin_profile',
+                ),
+                'bizRule' => 'return $params["id"] != $params["userId"];',
                 'data' => null,
             ),
 
